@@ -2,18 +2,22 @@
 
 body { background:#cbcbcb; color:#333333; font-size:12px; height:100%; margin:0px; overflow:hidden; }
 body a { cursor:default; text-decoration:none; }
-body ul { border:0px; margin:0px; padding:0px; }
-body ul li { border:0px; margin:0px; padding:0px; }
+body h1 { }
+body h2 { margin:0px; padding:0px; }
+body h3 { margin:0px; padding:0px; }
+body p { margin:0px; padding:0px; }
 body table { border:0px; border-collapse:collapse; margin:0px; padding:0px; }
 body table tr { margin:0px; padding:0px; }
 body table tr td { border:0px; margin:0px; padding:0px; }
+body ul { border:0px; margin:0px; padding:0px; }
+body ul li { border:0px; margin:0px; padding:0px; }
 
 div.clear { clear:both; font-size:0px; height:0px; overflow:hidden; width:0px; }
 
 div.header { background:url(../images/headerbackground.jpg) repeat-x; background-size:contain; overflow:hidden; padding:0px; width:100%; }
 div.header .shadow { box-shadow:rgba(0,0,0,0.5) 0px 1px 2px inset; }
 div.header div.center { background:url(../images/headerbackground.jpg) repeat-x; background-size:auto 150%; border-radius:5px; margin:0px auto; overflow:hidden; zoom:1; }
-div.header div.center a.button { color:#686d73; display:block; float:left; height:30px; line-height:30px; text-align:center; width:100px; }
+div.header div.center a.button { color:#686d73; display:block; float:left; height:30px; line-height:30px; overflow:hidden; text-align:center; width:100px; }
 div.header div.center a.button.shadow { background:#aaaaaa; color:#f2f2f2; }
 div.header div.search { background:#ffffff url(../images/search.png) no-repeat left center; background-size:auto 100%; box-shadow:rgba(0,0,0,0.5) 1px 2px 2px inset; float:right; height:44px; width:210px; }
 div.header div.search input { border:0px; float:left; padding:0px; width:150px; }
@@ -23,21 +27,25 @@ div.header div.search.filled a.clear { display:block; }
 
 div.main { overflow:scroll; width:100%; }
 div.main div.banner { border-radius:6px; box-shadow:rgba(0,0,0,0.5) 1px 1px 5px; overflow:hidden; }
-div.main div.banner div.displayer { background:blue; float:left; height:100%; width:75%; }
+div.main div.banner div.displayer { float:left; height:100%; width:75%; }
 div.main div.banner div.displayer a { display:block; height:100%; width:100%; }
 div.main div.banner div.displayer a img { border:0px; height:100%; width:100%; }
 div.main div.banner ul.section { float:left; height:100%; overflow:hidden; width:25%; }
 div.main div.banner ul.section>li { width:100%; }
-div.main div.banner ul.section>li a { background:red; display:block; height:100%; width:100%; }
+div.main div.banner ul.section>li a { display:block; height:100%; width:100%; }
 div.main div.banner ul.section>li a img { border:0px; height:100%; width:100%; }
 
 div.classify { overflow:hidden; width:100%; zoom:1; }
-div.classify h2 { box-shadow:rgba(0,0,0,0.3) 0px 5px 5px; font-size:14px; letter-spacing:2px; margin:0px; padding:0px; position:relative; }
-div.classify ul.pages { box-shadow:rgba(0,0,0,0.8) 0px 1px 2px; overflow:hidden; z-index:0; zoom:1; }
-div.classify ul.pages>li { float:left; overflow:hidden; zoom:1; }
-div.classify ul.pages>li div.item { background:#afafaf; border:solid 1px; border-color:#c1c1c1 #979797 #979797 #c1c1c1; float:left; }
-div.classify ul.pages>li div.item.alter { background:#bbbbbb; }
-div.classify ul.nav { margin:15px auto; overflow:hidden; zoom:1; }
-div.classify ul.nav>li { background:#999999; border-radius:3px; box-shadow:rgba(0,0,0,0.5) 2px 2px 2px inset; display:block; float:left; height:6px; margin:5px; width:6px; }
+div.classify>p.head { box-shadow:rgba(0,0,0,0.3) 0px 5px 5px; font-size:16px; font-weight:bold; letter-spacing:2px; position:relative; }
+div.classify>ul.pages { box-shadow:rgba(0,0,0,0.8) 0px 1px 2px; overflow:hidden; z-index:0; zoom:1; }
+div.classify>ul.pages>li { float:left; overflow:hidden; zoom:1; }
+div.classify>ul.pages>li div.item { background:#afafaf; border:solid 1px; border-color:#c1c1c1 #979797 #979797 #c1c1c1; float:left; }
+div.classify>ul.pages>li div.item div.icon { border-radius:10px; float:left; height:80%; margin:5%; overflow:hidden; }
+div.classify>ul.pages>li div.item div.icon img { height:100%; width:100%; }
+div.classify>ul.pages>li div.item p.star { background:url(../images/star.jpg); }
+div.classify>ul.pages>li div.item p.title { font-size:16px; font-weight:bold; }
+div.classify>ul.pages>li div.item.alter { background:#bbbbbb; }
+div.classify>ul.nav { margin:15px auto; overflow:hidden; zoom:1; }
+div.classify>ul.nav>li { background:#999999; border-radius:3px; box-shadow:rgba(0,0,0,0.5) 2px 2px 2px inset; display:block; float:left; height:6px; margin:5px; width:6px; }
 
 div.footer { background:url(../images/footerbackground.jpg) repeat-x; background-size:contain; width:100%; }

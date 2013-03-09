@@ -5,7 +5,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{A689401F-838
 EndProject
 Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "Interation.iRepeater.App", "App\Interation.iRepeater.App\Interation.iRepeater.App.jsproj", "{89B07036-97C4-4987-9A22-6A122AB19AFA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apis", "Apis", "{FC6592A3-E036-4EE0-82E6-1C90F3B83279}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{FC6592A3-E036-4EE0-82E6-1C90F3B83279}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interation.iRepeater.Web", "Web\Interation.iRepeater.Web\Interation.iRepeater.Web.csproj", "{E4B742DC-0E03-4C22-9195-B394872EBFC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interation.iRepeater.Web.Controllers", "Web\Interation.iRepeater.Web.Controllers\Interation.iRepeater.Web.Controllers.csproj", "{F4DB4E57-C524-438D-AB32-28EC018028A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interation.iRepeater.Web.ViewModel", "Web\Interation.iRepeater.Web.ViewModel\Interation.iRepeater.Web.ViewModel.csproj", "{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,11 +49,44 @@ Global
 		{89B07036-97C4-4987-9A22-6A122AB19AFA}.Release|x86.ActiveCfg = Release|x86
 		{89B07036-97C4-4987-9A22-6A122AB19AFA}.Release|x86.Build.0 = Release|x86
 		{89B07036-97C4-4987-9A22-6A122AB19AFA}.Release|x86.Deploy.0 = Release|x86
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4}.Release|x64.ActiveCfg = Release|Any CPU
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4}.Release|x86.ActiveCfg = Release|Any CPU
+		{F4DB4E57-C524-438D-AB32-28EC018028A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4DB4E57-C524-438D-AB32-28EC018028A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4DB4E57-C524-438D-AB32-28EC018028A8}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{F4DB4E57-C524-438D-AB32-28EC018028A8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F4DB4E57-C524-438D-AB32-28EC018028A8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F4DB4E57-C524-438D-AB32-28EC018028A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4DB4E57-C524-438D-AB32-28EC018028A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4DB4E57-C524-438D-AB32-28EC018028A8}.Release|ARM.ActiveCfg = Release|Any CPU
+		{F4DB4E57-C524-438D-AB32-28EC018028A8}.Release|x64.ActiveCfg = Release|Any CPU
+		{F4DB4E57-C524-438D-AB32-28EC018028A8}.Release|x86.ActiveCfg = Release|Any CPU
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}.Release|x64.ActiveCfg = Release|Any CPU
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{89B07036-97C4-4987-9A22-6A122AB19AFA} = {A689401F-8387-4E15-AB9D-27FBAF9FA437}
+		{E4B742DC-0E03-4C22-9195-B394872EBFC4} = {FC6592A3-E036-4EE0-82E6-1C90F3B83279}
+		{F4DB4E57-C524-438D-AB32-28EC018028A8} = {FC6592A3-E036-4EE0-82E6-1C90F3B83279}
+		{E8A114B9-2BF4-46F0-B4AE-A8DBFA9AF34A} = {FC6592A3-E036-4EE0-82E6-1C90F3B83279}
 	EndGlobalSection
 EndGlobal
