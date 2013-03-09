@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+  <Identity Name="89b07036-97c4-4987-9a22-6a122ab19afa" Version="1.0.0.0" Publisher="CN=Bolun Lee" />
+  <Properties>
+    <DisplayName>Interation.iRepeater.App</DisplayName>
+    <PublisherDisplayName>Bolun Lee</PublisherDisplayName>
+    <Logo>images\storelogo.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.2.1</OSMinVersion>
+    <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" StartPage="Index.html">
+      <VisualElements DisplayName="Interation.iRepeater.App" Logo="images\logo.png" SmallLogo="images\smalllogo.png" Description="Interation.iRepeater.App" ForegroundText="light" BackgroundColor="#464646">
+        <DefaultTile ShowName="allLogos" />
+        <SplashScreen Image="images\splashscreen.png" />
+      </VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>
