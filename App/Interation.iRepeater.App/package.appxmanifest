@@ -14,7 +14,7 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" StartPage="Index.html">
+    <Application Id="App" StartPage="video.html">
       <VisualElements DisplayName="Interation.iRepeater.App" Logo="images\logo.png" SmallLogo="images\smalllogo.png" Description="Interation.iRepeater.App" ForegroundText="light" BackgroundColor="#464646">
         <DefaultTile ShowName="allLogos" />
         <SplashScreen Image="images\splashscreen.png" />
