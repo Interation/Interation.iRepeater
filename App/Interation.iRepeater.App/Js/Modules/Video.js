@@ -132,6 +132,8 @@
             case "video":
                 this._togglePanel();
                 break;
+            default:
+                break;
         }
     },
     _togglePanel: function (visible)
