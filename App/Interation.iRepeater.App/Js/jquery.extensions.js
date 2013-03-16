@@ -2,7 +2,15 @@
 {
     $.extend(
     {
-
+        exists: function (array, rule)
+        {
+            if (typeof rule == "function")
+            {
+                var exists = false;
+                $.each(array, function (i, e) { return !(exists = rule.apply(e, [i])); });
+                return exists;
+            }
+        }
     });
 
     $.fn.extend(

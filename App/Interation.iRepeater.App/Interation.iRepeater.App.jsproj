@@ -58,8 +58,11 @@
     <Content Include="Images\FooterBackground.jpg" />
     <Content Include="Images\Gradual.jpg" />
     <Content Include="Images\HeaderBackground.jpg" />
+    <Content Include="Images\Loading.gif" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\Play.png" />
     <Content Include="Images\Player.png" />
+    <Content Include="Images\PlayNav.png" />
     <Content Include="Images\Search.png" />
     <Content Include="Images\smalllogo.png" />
     <Content Include="Images\splashscreen.png" />
@@ -72,6 +75,7 @@
     <Content Include="Js\jquery-1.8.2-win8-1.0.min.js" />
     <Content Include="Js\jquery.draggazilla.js" />
     <Content Include="Js\jquery.extensions.js" />
+    <Content Include="Js\jquery.slider.js" />
     <Content Include="Js\Modules\Index.js" />
     <Content Include="Js\Modules\Video.js" />
     <Content Include="Resources\Images\1-120225132335.jpg" />
@@ -82,7 +86,7 @@
     <Content Include="Resources\Images\thCAFQ90VW.jpg" />
     <Content Include="Resources\Images\thCAJXIG7O.jpg" />
     <Content Include="Resources\Images\U1TwgCmtW_1290257963.jpg" />
-    <Content Include="Resources\Videos\1\1.mp4" />
+    <Content Include="Resources\Videos\1\320x240.m4v" />
     <Content Include="Video.html" />
     <None Include="Interation.iRepeater.App_TemporaryKey.pfx" />
   </ItemGroup>
