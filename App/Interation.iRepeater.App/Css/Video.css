@@ -5,11 +5,10 @@ html a { text-decoration:none; }
 .jquery-slider-bar { box-shadow:3px 3px 8px #000000 inset; cursor:pointer; }
 .jquery-slider-innerbar { box-shadow:3px 3px 8px #000000 inset; }
 
-video { background:#000000; height:100%; width:100%; }
+video { background:#000000 url(../images/loading.gif) no-repeat center; height:100%; width:100%; }
 
 div.header { background:url(../images/videobackground.jpg) repeat-x; background-size:100% 100%; border-bottom:solid 1px #333333; left:0px; position:absolute; top:0px; width:100%; }
-div.header a.back { background:blue; color:#ffffff; cursor:default; border-radius:5px; display:block; float:left; height:70%; text-align:center; width:10%; }
-div.header a.setting { background:blue; border-radius:5px; display:block; float:left; height:70%; width:10%; }
+div.header a.button { background:blue; color:#ffffff; cursor:default; border-radius:5px; display:block; float:left; height:70%; text-align:center; width:10%; }
 div.header div.progress { float:left; }
 div.header span.timer { color:#ffffff; display:block; float:left; text-align:center; }
 

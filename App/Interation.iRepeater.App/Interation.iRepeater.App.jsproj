@@ -75,9 +75,11 @@
     <Content Include="Js\jquery-1.8.2-win8-1.0.min.js" />
     <Content Include="Js\jquery.draggazilla.js" />
     <Content Include="Js\jquery.extensions.js" />
+    <Content Include="Js\jquery.fileSystem.js" />
     <Content Include="Js\jquery.slider.js" />
     <Content Include="Js\Modules\Index.js" />
     <Content Include="Js\Modules\Video.js" />
+    <Content Include="Resources\App.config" />
     <Content Include="Resources\Images\1-120225132335.jpg" />
     <Content Include="Resources\Images\F201206111000432486213364.jpg" />
     <Content Include="Resources\Images\Gradual.jpg" />
@@ -86,7 +88,8 @@
     <Content Include="Resources\Images\thCAFQ90VW.jpg" />
     <Content Include="Resources\Images\thCAJXIG7O.jpg" />
     <Content Include="Resources\Images\U1TwgCmtW_1290257963.jpg" />
-    <Content Include="Resources\Videos\1\320x240.m4v" />
+    <Content Include="Resources\Subtitles\1\en-us.xml" />
+    <Content Include="Resources\Videos\1\a.m4v" />
     <Content Include="Video.html" />
     <None Include="Interation.iRepeater.App_TemporaryKey.pfx" />
   </ItemGroup>

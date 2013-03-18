@@ -7,7 +7,7 @@
         $(window).resize(function () { _this._resizePage(); }).resize();
         $("div.search a.clear").click(function () { _this._clearKeywords(); });
         $("div.header div.center a.button").click(function () { _this._selectHeader(this); }).eq(0).click();
-        $("div.product").click(function (event) { _this.play(this, event); });
+        $("div.product").click(function (event) { });
         $("input:text").watermark("搜索")
                        .focus(function (event) { _this._focus(this, event); })
                        .keypress(function (event) { _this._keypress(this, event); })
@@ -17,10 +17,6 @@
     search: function (keywords)
     {
         alert(keywords);
-    },
-    play: function (sender, event)
-    {
-        location.href = "video.html";
     },
     _resizePage: function ()
     {

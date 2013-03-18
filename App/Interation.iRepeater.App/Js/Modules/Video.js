@@ -3,15 +3,99 @@
     init: function ()
     {
         var _this = this;
+        this._timer = {};
 
         $("a.play").click(function (event) { _this.play(this, event); });
+        $("a.back").click(function (event) { history.go(-1); });
         $("video").click(function (event) { _this._click(this, event); })
                   .bind("ended", function (event) { _this._ended(this, event); })
                   .bind("timeupdate", function (event) { _this._timeupdate(this, event); });
-        $(window).keyup(function (event) { _this._keyup(this, event); });
+        $(window).keyup(function (event) { _this._keyup(this, event); })
+                 .bind("selectstart", function () { return false; });
 
-        this._timer = {};
-        this._loadingVideo(function (video) { _this._ready(video); });
+        this._resizePage($(window).width(), $(window).height());
+        this._sliderVolumn = this._generateVolumnSlider();
+        this._sliderProgress = this._generateProgressSlider();
+
+        document.addEventListener("deviceready", function () { _this._loading(); }, false);
+    },
+    _loading: function ()
+    {
+        var json =
+        {
+            url: "resources/app.config",
+            success: function (product)
+            {
+                var video = $("video");
+                $.each(product.resources, function () { $("<source></source>").attr({ src: this.src, type: this.type }).appendTo(video); });
+
+                _this._loadSubtitle(function (subtitle)
+                {
+
+                });
+
+                _this._loadingVideo(function (video)
+                {
+                    $("span.timer.current").text(_this._formatTime(sender.currentTime));
+                    $("span.timer.rest").text("-" + _this._formatTime(sender.duration));
+
+                    _this._togglePanel(true);
+                    _this._sliderProgress.reset(0, sender.duration);
+                });
+            },
+            error: function (response)
+            {
+                
+            }
+        };
+
+        var _this = this;
+        this._getInfo(json);
+    },
+    _getInfo: function(options)
+    {
+        var regExp = /(\?|$)id=(\d+)/i;
+
+        if (!regExp.test(location.href))
+        {
+            alert("error parameter");
+            return;
+        }
+
+        var id = regExp.exec(location.href)[2];
+
+        var json =
+        {
+            url: options.url,
+            success: function (text)
+            {
+                var xml = $(text);
+                var element = xml.find("downloaded>product[id=" + id + "]");
+
+                if (typeof options.success == "function")
+                {
+                    var info =
+                    {
+                        id: id,
+                        name: element.attr("name"),
+                        category: element.attr("category"),
+                        resources: element.find("resources>add").convert(function (i) { return { name: this.attr("name"), src: this.attr("src"), type: this.attr("type") }; }),
+                        subtitles: element.find("subtitles>add").convert(function (i) { return { name: this.attr("name"), src: this.attr("src") }; })
+                    };
+
+                    options.success(info);
+                }
+            },
+            error: function (response)
+            {
+                if (typeof options.error == "function")
+                {
+                    options.error(response);
+                }
+            }
+        };
+
+        $.getFile(json);
     },
     _timeupdate: function (sender, event)
     {
@@ -19,16 +103,6 @@
         $("span.timer.rest").text("-" + this._formatTime(sender.duration - sender.currentTime));
 
         this._sliderProgress.setValue(sender.currentTime);
-    },
-    _ready:function(sender)
-    {
-        $("span.timer.current").text(this._formatTime(sender.currentTime));
-        $("span.timer.rest").text("-" + this._formatTime(sender.duration));
-
-        this._resizePage($(window).width(), $(window).height());
-        this._sliderVolumn = this._generateVolumnSlider();
-        this._sliderProgress = this._generateProgressSlider(0, sender.currentTime, sender.duration);
-        this._togglePanel(true);
     },
     _formatTime: function (seconds)
     {
@@ -58,7 +132,24 @@
             }
         }, 0);
     },
-    _generateVolumnSlider: function()
+    _loadSubtitle: function (filePath)
+    {
+        var options =
+        {
+            create: true,
+            success: function (file)
+            {
+                alert(file);
+            },
+            fail: function (error)
+            {
+                alert(error.code);
+            }
+        };
+
+        //$.getFile("aaa.txt", options);
+    },
+    _generateVolumnSlider: function ()
     {
         var _this = this;
 
@@ -74,7 +165,13 @@
     {
         var _this = this;
         var video = $("video").get(0);
-        var setCurrentTime = function (value) { video.currentTime = value; };
+        var setCurrentTime = function (value)
+        {
+            if (video.readyState > 0)
+            {
+                video.currentTime = value;
+            }
+        };
 
         return $("div.progress").slider(
         {
@@ -86,11 +183,11 @@
             mousemove: setCurrentTime
         });
     },
-    _getVolumn :function(volumn)
+    _getVolumn: function (volumn)
     {
         return $("video").get(0).volume;
     },
-    _setVolumn: function(volumn)
+    _setVolumn: function (volumn)
     {
         $("video").get(0).volume = volumn;
     },
@@ -180,7 +277,7 @@
     },
     _ended: function (sender, event)
     {
-        this.pause(sender, event);
+        this._toggleState();
         sender.currentTime = 0;
     },
     _resizePage: function (width, height)
@@ -213,7 +310,7 @@
         timer.css({ fontSize: height * 0.3, height: height, lineHeight: height + "px", width: timerWidth });
         back.css({ height: parseInt(height * 0.7), marginLeft: buttonMargin, marginRight: buttonMargin, width: parseInt(0.5 * (width - 2 * timerWidth - 4 * buttonMargin - progressWidth)) });
         back.css({ lineHeight: back.height() + "px", marginTop: parseInt(0.5 * (height - back.height())) });
-        setting.css({ height: back.height(), marginLeft: buttonMargin, marginRight: buttonMargin, marginTop: back.css("margin-top"), width: back.width() });
+        setting.css({ height: back.height(), lineHeight: back.css("line-height"), marginLeft: buttonMargin, marginRight: buttonMargin, marginTop: back.css("margin-top"), width: back.width() });
     },
     _resizeControl: function (control, width, height)
     {

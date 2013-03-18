@@ -52,6 +52,11 @@
 
             return this;
         },
+        reset: function(start, end)
+        {
+            this.options.start = start;
+            this.options.end = end;
+        },
         setValue: function (value)
         {
             if (this._sliding) { return; }
