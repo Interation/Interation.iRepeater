@@ -52,10 +52,12 @@
 
             return this;
         },
-        reset: function(start, end)
+        reset: function(start, end, value)
         {
             this.options.start = start;
             this.options.end = end;
+
+            this._slideTo(this._getPosition(value));
         },
         setValue: function (value)
         {

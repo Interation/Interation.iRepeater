@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<products>
+    <product id="1" name="Kungfu Panda" category="video">
+        <resource id="1" name="Kungfu Panda A" src="resources/videos/1/a.m4v" type="video/mp4">
+            <subtitle id="1" name="Kungfu Panda English" src="resources/subtitles/1/en-us.xml"></subtitle>
+            <subtitle id="2" name="Kungfu Panda Chinese" src="resources/subtitles/1/zh-cn.xml"></subtitle>
+            <subtitle id="3" name="Kungfu Panda English Chinese" src="resources/subtitles/1/en-us.xml"></subtitle>
+        </resource>
+        <resource id="2" name="Kungfu Panda A" src="resources/videos/1/1.mp4" type="video/mp4">
+            <subtitle id="4" name="Kungfu Panda English" src="resources/subtitles/1/en-us.xml"></subtitle>
+            <subtitle id="5" name="Kungfu Panda Chinese" src="resources/subtitles/1/zh-cn.xml"></subtitle>
+            <subtitle id="6" name="Kungfu Panda English &amp; Chinese" src="resources/subtitles/1/en-us.xml"></subtitle>
+        </resource>
+    </product>
+</products>

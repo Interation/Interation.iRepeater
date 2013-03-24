@@ -6,29 +6,38 @@
     <link href="css/video.css" rel="stylesheet" />
 </head>
 <body>
-    <video>
-    </video>
-    <div class="header" style="display:none;">
+    <video></video>
+    <div id="header" style="display:none;">
         <a class="button back" href="javascript:void(0);">Complete</a>
         <span class="timer current">0:00</span>
         <div class="progress"></div>
         <span class="timer rest">0:00</span>
         <a class="button setting" href="javascript:void(0);">Preference</a>
     </div>
-    <div class="repeat" style="display:none;">
+    <div id="repeat">
+        <a class="outcrop" href="javascript:void(0);" id="outcrop"></a>
+        <div class="subtitle">
+            <table class="subtitle">
+                <tr class="template" style="display:none;">
+                    <td class="time start"></td>
+                    <td class="text"></td>
+                    <td class="time end"></td>
+                </tr>
+            </table>
+        </div>
+        <a class="close" href="javascript:void(0);"></a>
+    </div>
+    <div id="setting" style="display:none;">
 
     </div>
-    <div class="setting" style="display:none;">
-
-    </div>
-    <div class="control" style="display:none;">
+    <div id="control" style="display:none;">
         <div class="button">
             <a class="button nav last disabled" href="javascript:void(0);"></a>
             <a class="button play" href="javascript:void(0);"></a>
             <a class="button nav next disabled" href="javascript:void(0);"></a>
         </div>
         <div class="volumn"></div>
-        <div class="bg"></div>
+        <div class="background"></div>
     </div>
 
     <script src="//Microsoft.WinJS.1.0/js/base.js"></script>

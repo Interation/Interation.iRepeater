@@ -54,12 +54,15 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="Css\Video.css" />
+    <Content Include="Data\Product.table" />
+    <Content Include="Images\back_right.png" />
     <Content Include="Images\Clear.png" />
     <Content Include="Images\FooterBackground.jpg" />
     <Content Include="Images\Gradual.jpg" />
     <Content Include="Images\HeaderBackground.jpg" />
     <Content Include="Images\Loading.gif" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\Outcrop.png" />
     <Content Include="Images\Play.png" />
     <Content Include="Images\Player.png" />
     <Content Include="Images\PlayNav.png" />
@@ -68,6 +71,7 @@
     <Content Include="Images\splashscreen.png" />
     <Content Include="Images\Stars.png" />
     <Content Include="Images\storelogo.png" />
+    <Content Include="Images\YellowFeather.png" />
     <Content Include="Images\VideoBackground.jpg" />
     <Content Include="Index.html" />
     <Content Include="Css\Global.css" />
@@ -79,7 +83,6 @@
     <Content Include="Js\jquery.slider.js" />
     <Content Include="Js\Modules\Index.js" />
     <Content Include="Js\Modules\Video.js" />
-    <Content Include="Resources\App.config" />
     <Content Include="Resources\Images\1-120225132335.jpg" />
     <Content Include="Resources\Images\F201206111000432486213364.jpg" />
     <Content Include="Resources\Images\Gradual.jpg" />
@@ -88,7 +91,10 @@
     <Content Include="Resources\Images\thCAFQ90VW.jpg" />
     <Content Include="Resources\Images\thCAJXIG7O.jpg" />
     <Content Include="Resources\Images\U1TwgCmtW_1290257963.jpg" />
-    <Content Include="Resources\Subtitles\1\en-us.xml" />
+    <Content Include="Resources\Subtitles\1\en-us.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\Videos\1\1.mp4" />
     <Content Include="Resources\Videos\1\a.m4v" />
     <Content Include="Video.html" />
     <None Include="Interation.iRepeater.App_TemporaryKey.pfx" />

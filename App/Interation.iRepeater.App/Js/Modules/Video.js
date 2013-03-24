@@ -5,82 +5,100 @@
         var _this = this;
         this._timer = {};
 
-        $("a.play").click(function (event) { _this.play(this, event); });
-        $("a.back").click(function (event) { history.go(-1); });
         $("video").click(function (event) { _this._click(this, event); })
+                  .keydown(function () { return false; })
                   .bind("ended", function (event) { _this._ended(this, event); })
                   .bind("timeupdate", function (event) { _this._timeupdate(this, event); });
         $(window).keyup(function (event) { _this._keyup(this, event); })
+                 .mousemove(function (event) { _this._mousemove(this, event); })
+                 .mouseup(function () { _this._mouseup(this, event); })
                  .bind("selectstart", function () { return false; });
+        $("div#control a.play").click(function (event) { _this.play(this, event); });
+        $("div#control a.back").click(function (event) { history.go(-1); });
+        $("div#repeat a.outcrop").bind("drag", function () { return false; }).mousedown(function (event) { _this._mousedown(this, event); });
+        $("div#repeat a.close").click(function () { _this._toggleRepeat(false); });
 
         this._resizePage($(window).width(), $(window).height());
         this._sliderVolumn = this._generateVolumnSlider();
         this._sliderProgress = this._generateProgressSlider();
 
-        document.addEventListener("deviceready", function () { _this._loading(); }, false);
+        this._toggleRepeat(true);
+
+        this._loading();
+    },
+    play: function (sender, event)
+    {
+        sender = $(sender);
+        var video = $("video").get(0);
+
+        if (sender.hasClass("pause"))
+        {
+            video.pause();
+            sender.removeClass("pause");
+            this._togglePanel(true);
+        }
+        else
+        {
+            video.play();
+            sender.addClass("pause");
+            this._togglePanel(false);
+        }
     },
     _loading: function ()
     {
         var json =
         {
-            url: "resources/app.config",
+            url: "data/product.table",
+            data: { id: this._getQueryStringId() },
             success: function (product)
             {
-                var video = $("video");
-                $.each(product.resources, function () { $("<source></source>").attr({ src: this.src, type: this.type }).appendTo(video); });
-
-                _this._loadSubtitle(function (subtitle)
-                {
-
-                });
-
-                _this._loadingVideo(function (video)
-                {
-                    $("span.timer.current").text(_this._formatTime(sender.currentTime));
-                    $("span.timer.rest").text("-" + _this._formatTime(sender.duration));
-
-                    _this._togglePanel(true);
-                    _this._sliderProgress.reset(0, sender.duration);
-                });
+                _this._product = product;
+                _this._loadingVideo(0);
             },
             error: function (response)
             {
-                
             }
         };
 
         var _this = this;
         this._getInfo(json);
     },
-    _getInfo: function(options)
+    _getInfo: function (options)
     {
-        var regExp = /(\?|$)id=(\d+)/i;
-
-        if (!regExp.test(location.href))
-        {
-            alert("error parameter");
-            return;
-        }
-
-        var id = regExp.exec(location.href)[2];
-
         var json =
         {
             url: options.url,
             success: function (text)
             {
-                var xml = $(text);
-                var element = xml.find("downloaded>product[id=" + id + "]");
+                var element = $(text).find("product[id=" + options.data.id + "]");
 
                 if (typeof options.success == "function")
                 {
                     var info =
                     {
-                        id: id,
+                        id: options.data.id,
                         name: element.attr("name"),
                         category: element.attr("category"),
-                        resources: element.find("resources>add").convert(function (i) { return { name: this.attr("name"), src: this.attr("src"), type: this.attr("type") }; }),
-                        subtitles: element.find("subtitles>add").convert(function (i) { return { name: this.attr("name"), src: this.attr("src") }; })
+                        resources: $.convert(element.children("resource"), function (i, resource)
+                        {
+                            resource = $(resource);
+
+                            return {
+                                name: resource.attr("name"),
+                                src: resource.attr("src"),
+                                type: resource.attr("type"),
+                                subtitles: $.convert(resource.children("subtitle"), function (ii, subtitle)
+                                {
+                                    subtitle = $(subtitle);
+
+                                    return subtitle =
+                                    {
+                                        name: subtitle.attr("name"),
+                                        src: subtitle.attr("src")
+                                    };
+                                })
+                            };
+                        })
                     };
 
                     options.success(info);
@@ -97,6 +115,11 @@
 
         $.getFile(json);
     },
+    _getQueryStringId: function ()
+    {
+        return 1;
+        return (function (regExp, href) { return regExp.test(href) ? regExp.exec(href)[2] : 0; })(/(\?|$)id=(\d+)/i, location.href);
+    },
     _timeupdate: function (sender, event)
     {
         $("span.timer.current").text(this._formatTime(sender.currentTime));
@@ -111,10 +134,23 @@
         if (seconds < 10) { seconds = "0" + seconds; }
         return minutes + ":" + seconds;
     },
-    _loadingVideo: function (callback)
+    _loadingVideo: function (index)
     {
         var _this = this;
+        this._resourceIndex = index = index || 0;
+
+        var product = this._product;
+        if (product == undefined) { return; }
+        if (product.resources.length < index + 1) { return; }
+
+        var resource = product.resources[this._resourceIndex];
+        if (resource == undefined) { return; }
+
         var video = $("video").get(0);
+        video.src = resource.src;
+        video.type = resource.type;
+
+        this._loadingSubtitle(0)
 
         this._timer.loading = setInterval(function ()
         {
@@ -122,7 +158,12 @@
             {
                 if (video.readyState > 0)
                 {
-                    callback(video);
+                    $("span.timer.current").text(_this._formatTime(video.currentTime));
+                    $("span.timer.rest").text("-" + _this._formatTime(video.duration));
+
+                    _this._togglePanel(true);
+                    _this._sliderProgress.reset(0, video.duration, video.currentTime);
+
                     clearInterval(_this._timer.loading);
                 }
             }
@@ -130,24 +171,58 @@
             {
                 clearInterval(_this._timer.loading);
             }
-        }, 0);
+        }, 10);
     },
-    _loadSubtitle: function (filePath)
+    _loadingSubtitle: function (index)
     {
+        var _this = this;
+        this._subtitleIndex = index = index || 0;
+
+        var product = this._product;
+        if (product.resources == undefined) { return; }
+        if (product.resources.length < this._resourceIndex + 1) { return; }
+
+        var resource = product.resources[this._resourceIndex];
+        if (resource == undefined) { return; }
+        if (resource.subtitles == undefined) { return; }
+        if (resource.subtitles.length < this._subtitleIndex + 1) { return; }
+
+        var subtitle = resource.subtitles[this._subtitleIndex];
+
         var options =
         {
-            create: true,
-            success: function (file)
+            url: subtitle.src,
+            success: function (text)
             {
-                alert(file);
+                var nodes = $(text).find("add");
+                var subtitle = $("div#repeat div.subtitle");
+                var table = subtitle.children("table.subtitle");
+                var template = table.find("tr.template").clone().removeClass("template").show();
+                var tr = null;
+                
+                $.each(nodes, function (i, node)
+                {
+                    node = $(node);
+                    tr = template.clone();
+                    tr.children("td.time.start").text(node.attr("start"));
+                    tr.children("td.time.end").text(node.attr("end"));
+
+                    var p = node.children("p");
+                    if (p.length <= 1) { $("<p></p>").text(node.text()).appendTo(tr.children("td.text")); }
+                    else { $.each(p, function (i, p) { $("<p></p>").text($(p).text()).appendTo(tr.children("td.text")); }); }
+
+                    table.append(tr);
+                });
+
+                _this._resizeSubtitle(subtitle, subtitle.width(), subtitle.height());
             },
-            fail: function (error)
+            error: function (error)
             {
-                alert(error.code);
+
             }
         };
 
-        //$.getFile("aaa.txt", options);
+        $.getFile(options);
     },
     _generateVolumnSlider: function ()
     {
@@ -191,32 +266,61 @@
     {
         $("video").get(0).volume = volumn;
     },
-    play: function (sender, event)
-    {
-        sender = $(sender);
-        var video = $("video").get(0);
-
-        if (sender.hasClass("pause"))
-        {
-            video.pause();
-            sender.removeClass("pause");
-            this._togglePanel(true);
-        }
-        else
-        {
-            video.play();
-            sender.addClass("pause");
-            this._togglePanel(false);
-        }
-    },
     _keyup: function (sender, event)
     {
         switch (event.keyCode)
         {
             case 32:
+                if (parseInt($("div#repeat").css("left")) < $(window).width()) { return; }
                 this._toggleState();
                 break;
             default:
+                break;
+        }
+    },
+    _mousedown: function(sender, event)
+    {
+        sender = $(sender);
+        this.__movestart = { sender: sender, event: event };
+
+        switch (sender.attr("id"))
+        {
+            case "outcrop":
+                this.__movestart.width = sender.width();
+                sender.unbind("mouseup").mouseup(function () { $(this).animate({ marginLeft: -this.breadth, width: this.breadth }); });
+                break;
+        }
+    },
+    _mouseup: function(sender, event)
+    {
+        this.__movestart = null;
+    },
+    _mousemove: function (sender, event)
+    {
+        if (this.__movestart == null) { return; }
+        sender = $(sender);
+
+        var _sender = this.__movestart.sender;
+        var _event = this.__movestart.event;
+
+        switch (this.__movestart.sender.attr("id"))
+        {
+            case "outcrop":
+                var width = this.__movestart.width;
+                var breadth = _sender.get(0).breadth;
+                var offset = _event.pageX - event.pageX;
+
+                if (width + offset >= _sender.height())
+                {
+                    sender.trigger("mouseup");
+                    _sender.unbind("mouseup");
+                    this._togglePanel(false);
+                    this._toggleRepeat(true);
+                }
+                else
+                {
+                    _sender.css({ marginLeft: -(width + offset), width: width + offset });
+                }
                 break;
         }
     },
@@ -227,6 +331,7 @@
         switch (sender.tagName.toLowerCase())
         {
             case "video":
+                if (parseInt($("div#repeat").css("left")) < $(window).width()) { return; }
                 this._togglePanel();
                 break;
             default:
@@ -235,12 +340,14 @@
     },
     _togglePanel: function (visible)
     {
+        // 分析优化算法, 用一个 timer
         var _this = this;
         if (this.__togglingPanel) { return; }
 
         var duration = 800;
-        var header = $("div.header");
-        var control = $("div.control");
+        var header = $("div#header");
+        var control = $("div#control");
+        var repeatOutcrop = $("a#outcrop");
         var openToggling = function () { _this.__togglingPanel = false; };
 
         visible = visible == undefined ? (!header.is(":visible")) : visible;
@@ -251,6 +358,8 @@
         {
             header.show().animate({ top: 0 }, duration, openToggling);
             control.show().animate({ marginTop: -2 * control.height() }, duration);
+            repeatOutcrop.animate({ marginLeft: -repeatOutcrop.get(0).breadth, width: repeatOutcrop.get(0).breadth }, duration);
+
             this.__togglingPanel = true;
 
             if (!$("video").get(0).paused)
@@ -268,6 +377,7 @@
 
             header.animate({ top: -header.height() }, duration, function () { $(this).hide(); openToggling(); });
             control.animate({ marginTop: 0 }, duration, function () { $(this).hide(); });
+            repeatOutcrop.animate({ marginLeft: 0, width: 0 }, duration);
             this.__togglingPanel = true;
         }
     },
@@ -275,25 +385,33 @@
     {
         $("a.play").click();
     },
+    _toggleRepeat: function (visible)
+    {
+        var repeat = $("div#repeat");
+        repeat.animate({ left: visible === true ? (0.5 * ($(window).width() - repeat.width())) : $(window).width() }, 800);
+    },
     _ended: function (sender, event)
     {
-        this._toggleState();
+        sender.pause();
         sender.currentTime = 0;
+        this._toggleState();
     },
     _resizePage: function (width, height)
     {
         var video = $("video");
-        var header = $("div.header");
-        var control = $("div.control");
-        var repeat = $("div.repeat");
-        var setting = $("div.setting");
+        var header = $("div#header");
+        var control = $("div#control");
+        var repeat = $("div#repeat");
+        var setting = $("div#setting");
 
         video.css({ height: height, width: width });
         header.css({ height: parseInt((height + width) * 0.02), width: width }).css({ top: -header.height() });
         control.css({ width: parseInt((height + width) * 0.22) }).css({ height: parseInt(control.width() * 0.2) });
+        repeat.css({ height: parseInt(height * 0.6) }).css({ width: parseInt(repeat.height() * 2) }).css({ left: width, top: parseInt(0.5 * (height - repeat.height())) });
 
         this._resizeHeader(header, header.width(), header.height());
         this._resizeControl(control, control.width(), control.height());
+        this._resizeRepeat(repeat, repeat.width(), repeat.height());
     },
     _resizeHeader: function (header, width, height)
     {
@@ -314,16 +432,37 @@
     },
     _resizeControl: function (control, width, height)
     {
-        var bg = control.children("div.bg");
+        var background = control.children("div.background");
         var row = control.children("div.button");
         var buttons = row.children("a.button");
         var volumn = control.children("div.volumn");
 
-        bg.css({ opacity: bg.css("opacity") });
+        background.css({ opacity: background.css("opacity") });
         row.css({ height: parseInt(height * 0.5), width: parseInt(width * 0.06) * 2 * buttons.length });
         buttons.css({ height: parseInt(row.height() * 0.8) }).css({ width: buttons.height() });
         buttons.css({ margin: (row.width() / 3 - buttons.width()) * 0.5, marginTop: parseInt(0.5 * (row.height() - buttons.height())), marginBottom: 0 });
         volumn.css({ height: parseInt(row.height() * 0.2), width: parseInt(width * 0.7) });
         volumn.css({ borderRadius: volumn.height(), marginTop: parseInt(0.5 * (height * 0.5 - volumn.height())) });
+    },
+    _resizeRepeat: function (repeat, width, height)
+    {
+        var outcrop = repeat.children("a.outcrop");
+        var subtitle = repeat.children("div.subtitle");
+        var close = repeat.children("a.close");
+
+        repeat.css({ borderRadius: parseInt(width * 0.01), boxShadow: "0px 0px " + (width * 0.02) + "px rgba(255,0,0,0.6)" });
+        outcrop.css({ height: parseInt(height * 0.3) }).css({ marginTop: parseInt(0.5 * (height - outcrop.height())) }).get(0).breadth = parseInt(outcrop.height() * 0.06);
+        outcrop.css({ "border-bottom-left-radius": outcrop.height() * 0.2 }).css({ "border-top-left-radius": outcrop.css("border-bottom-left-radius") })
+        close.css({ width: parseInt(width * 0.02) }).css({ height: 3 * close.width() }).css({ marginTop: -parseInt(height * 0.9) });
+        subtitle.css({ margin: height + parseInt(close.css("margin-top")) }).css({ height: height - 2 * parseInt(subtitle.css("margin-top")) });
+    },
+    _resizeSubtitle: function (subtitle, width, height)
+    {
+        var table = subtitle.children("table.subtitle");
+        var rows = table.find("tr:visible");
+        var time = rows.first().children("td.time");
+
+        rows.css({ height: parseInt(height * 0.15) });
+        time.css({ width: parseInt(width * 0.1) });
     }
 };
