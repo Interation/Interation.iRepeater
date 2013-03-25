@@ -56,6 +56,8 @@
     <Content Include="Css\Video.css" />
     <Content Include="Data\Product.table" />
     <Content Include="Images\back_right.png" />
+    <Content Include="Images\bg.jpg" />
+    <Content Include="Images\circle.png" />
     <Content Include="Images\Clear.png" />
     <Content Include="Images\FooterBackground.jpg" />
     <Content Include="Images\Gradual.jpg" />
@@ -71,6 +73,7 @@
     <Content Include="Images\splashscreen.png" />
     <Content Include="Images\Stars.png" />
     <Content Include="Images\storelogo.png" />
+    <Content Include="Images\VerticalGradient.png" />
     <Content Include="Images\YellowFeather.png" />
     <Content Include="Images\VideoBackground.jpg" />
     <Content Include="Index.html" />

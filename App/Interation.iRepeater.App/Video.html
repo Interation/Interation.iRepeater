@@ -6,7 +6,7 @@
     <link href="css/video.css" rel="stylesheet" />
 </head>
 <body>
-    <video></video>
+    <video for="video"></video>
     <div id="header" style="display:none;">
         <a class="button back" href="javascript:void(0);">Complete</a>
         <span class="timer current">0:00</span>
@@ -15,15 +15,27 @@
         <a class="button setting" href="javascript:void(0);">Preference</a>
     </div>
     <div id="repeat">
-        <a class="outcrop" href="javascript:void(0);" id="outcrop"></a>
+        <a class="outcrop" href="javascript:void(0);" id="outcrop">
+
+        </a>
+        <div class="line left">
+
+        </div>
+        <div class="line right">
+
+        </div>
         <div class="subtitle">
-            <table class="subtitle">
-                <tr class="template" style="display:none;">
-                    <td class="time start"></td>
-                    <td class="text"></td>
-                    <td class="time end"></td>
-                </tr>
-            </table>
+            <ul class="subtitle">
+                <li class="template" for="li.subtitle" style="display:none;">
+                    <p class="text"></p>
+                    <p class="circle start"></p>
+                    <p class="circle end"></p>
+                    <a class="selector start" for="a.subtitle" href="javascript:void(0);"></a>
+                    <a class="selector end" for="a.subtitle" href="javascript:void(0);"></a>
+                    <span class="time start"></span>
+                    <span class="time end"></span>
+                </li>
+            </ul>
         </div>
         <a class="close" href="javascript:void(0);"></a>
     </div>

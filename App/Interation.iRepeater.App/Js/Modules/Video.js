@@ -15,15 +15,19 @@
                  .bind("selectstart", function () { return false; });
         $("div#control a.play").click(function (event) { _this.play(this, event); });
         $("div#control a.back").click(function (event) { history.go(-1); });
-        $("div#repeat a.outcrop").bind("drag", function () { return false; }).mousedown(function (event) { _this._mousedown(this, event); });
+        $("div#repeat a.outcrop").bind("drag", function () { return false; })
+                                 .mousedown(function (event) { _this._mousedown(this, event); });
         $("div#repeat a.close").click(function () { _this._toggleRepeat(false); });
+        $("div#repeat span.time").live("click", function (event) { event.stopPropagation(); });
+        $("div#repeat ul.subtitle>li").live("click", function (event) { _this._click(this, event); })
+                                      .live("mousedown", function (event) { event.stopPropagation(); });
+        $("div#repeat a.selector").live("click", function (event) { _this._click(this, event); })
+                                  .live("drag", function (event) { event.stopPropagation(); });
 
         this._resizePage($(window).width(), $(window).height());
         this._sliderVolumn = this._generateVolumnSlider();
         this._sliderProgress = this._generateProgressSlider();
-
         this._toggleRepeat(true);
-
         this._loading();
     },
     play: function (sender, event)
@@ -150,7 +154,7 @@
         video.src = resource.src;
         video.type = resource.type;
 
-        this._loadingSubtitle(0)
+        this._loadingSubtitle(0);
 
         this._timer.loading = setInterval(function ()
         {
@@ -196,22 +200,18 @@
             {
                 var nodes = $(text).find("add");
                 var subtitle = $("div#repeat div.subtitle");
-                var table = subtitle.children("table.subtitle");
-                var template = table.find("tr.template").clone().removeClass("template").show();
-                var tr = null;
-                
+                var uls = subtitle.find("ul.subtitle");
+                var template = uls.children("li.template").clone().attr("class", "item").show();
+                var item = null;
+
                 $.each(nodes, function (i, node)
                 {
                     node = $(node);
-                    tr = template.clone();
-                    tr.children("td.time.start").text(node.attr("start"));
-                    tr.children("td.time.end").text(node.attr("end"));
-
-                    var p = node.children("p");
-                    if (p.length <= 1) { $("<p></p>").text(node.text()).appendTo(tr.children("td.text")); }
-                    else { $.each(p, function (i, p) { $("<p></p>").text($(p).text()).appendTo(tr.children("td.text")); }); }
-
-                    table.append(tr);
+                    item = template.clone().appendTo(uls);
+                    item.children("span.start").text(node.attr("start"));
+                    item.children("span.end").text(node.attr("end"));
+                    item.children("p.text").text(node.text());
+                    item.attr("index", i);
                 });
 
                 _this._resizeSubtitle(subtitle, subtitle.width(), subtitle.height());
@@ -327,16 +327,93 @@
     _click: function (sender, event)
     {
         var _this = this;
+        sender = $(sender);
 
-        switch (sender.tagName.toLowerCase())
+        switch (sender.attr("for"))
         {
             case "video":
                 if (parseInt($("div#repeat").css("left")) < $(window).width()) { return; }
                 this._togglePanel();
                 break;
+            case "li.subtitle":
+                var list = sender.parent().children("li:visible");
+                list.removeClass("selected");
+                sender.addClass("selected");
+                this._refreshSubtitle(list);
+                break;
+            case "a.subtitle":
+                event.stopPropagation();
+
+                var li = sender.parent();
+                var list = li.parent().children("li:visible");
+                var selected = list.filter(".selected");
+                if (selected.length == 0) { return; }
+
+                var current = parseInt(li.attr("index"));
+                var first = parseInt(selected.first().attr("index"));
+                var last = parseInt(selected.last().attr("index"));
+                var start = 0, end = 0;
+
+                if (sender.hasClass("plus"))
+                {
+                    if (current < first) { start = current; end = first - 1; }
+                    else if (current > end) { start = last + 1; end = current; }
+
+                    for (var i = start; i <= end; i++) { list.eq(i).addClass("selected"); }
+                }
+                else if (sender.hasClass("minus"))
+                {
+                    if (sender.hasClass("start")) { start = first; end = current - 1; }
+                    else if (sender.hasClass("end")) { start = current + 1; end = last; }
+
+                    for (var i = start; i <= end; i++) { list.eq(i).removeClass("selected"); }
+                }
+                else
+                {
+                    return;
+                }
+
+                this._refreshSubtitle(list);
+                break;
             default:
                 break;
         }
+    },
+    _refreshSubtitle: function (list)
+    {
+        list = list || $("div#repeat ul.subtitle>li");
+        if (list.length <= 1) { return; }
+
+        $("div#repeat a.selector").removeClass("drag plus minus");
+        var found = false, selected = false;
+
+        $.each(list, function (i, li)
+        {
+            selected = (li = $(li)).hasClass("selected");
+
+            if (selected)
+            {
+                switch (i)
+                {
+                    case 0:
+                        li.find("a.end").addClass(list.eq(i + 1).hasClass("selected") ? "minus" : "drag");
+                        break;
+                    case list.length - 1:
+                        li.find("a.start").addClass(list.eq(i - 1).hasClass("selected") ? "minus" : "drag");
+                        break;
+                    default:
+                        li.find("a.start").addClass(list.eq(i - 1).hasClass("selected") ? "minus" : "drag");
+                        li.find("a.end").addClass(list.eq(i + 1).hasClass("selected") ? "minus" : "drag");
+                        break;
+                }
+
+                found = true;
+            }
+            else
+            {
+                li.find("a." + (found ? "end" : "start")).addClass("plus");
+            }
+        });
     },
     _togglePanel: function (visible)
     {
@@ -396,6 +473,10 @@
         sender.currentTime = 0;
         this._toggleState();
     },
+    _getShadow: function (offset, range, color, inset)
+    {
+        return offset + "px " + offset + "px " + range + "px " + color + (inset ? " inset" : "");
+    },
     _resizePage: function (width, height)
     {
         var video = $("video");
@@ -407,7 +488,7 @@
         video.css({ height: height, width: width });
         header.css({ height: parseInt((height + width) * 0.02), width: width }).css({ top: -header.height() });
         control.css({ width: parseInt((height + width) * 0.22) }).css({ height: parseInt(control.width() * 0.2) });
-        repeat.css({ height: parseInt(height * 0.6) }).css({ width: parseInt(repeat.height() * 2) }).css({ left: width, top: parseInt(0.5 * (height - repeat.height())) });
+        repeat.css({ height: parseInt(height * 0.65) }).css({ width: parseInt(repeat.height() * 2) }).css({ left: width, top: parseInt(0.5 * (height - repeat.height())) });
 
         this._resizeHeader(header, header.width(), header.height());
         this._resizeControl(control, control.width(), control.height());
@@ -449,20 +530,40 @@
         var outcrop = repeat.children("a.outcrop");
         var subtitle = repeat.children("div.subtitle");
         var close = repeat.children("a.close");
+        var line = repeat.children("div.line");
 
-        repeat.css({ borderRadius: parseInt(width * 0.01), boxShadow: "0px 0px " + (width * 0.02) + "px rgba(255,0,0,0.6)" });
-        outcrop.css({ height: parseInt(height * 0.3) }).css({ marginTop: parseInt(0.5 * (height - outcrop.height())) }).get(0).breadth = parseInt(outcrop.height() * 0.06);
+        repeat.css({ borderRadius: parseInt(width * 0.01), boxShadow: this._getShadow(0, width * 0.015, "rgba(0,0,0,0.5)") });
+        outcrop.css({ height: parseInt($(window).height() * 0.15) }).css({ marginTop: parseInt(0.5 * (height - outcrop.height())) }).get(0).breadth = parseInt(outcrop.height() * 0.06);
         outcrop.css({ "border-bottom-left-radius": outcrop.height() * 0.2 }).css({ "border-top-left-radius": outcrop.css("border-bottom-left-radius") })
-        close.css({ width: parseInt(width * 0.02) }).css({ height: 3 * close.width() }).css({ marginTop: -parseInt(height * 0.9) });
-        subtitle.css({ margin: height + parseInt(close.css("margin-top")) }).css({ height: height - 2 * parseInt(subtitle.css("margin-top")) });
+        subtitle.css({ marginTop: parseInt(height * 0.06) }).css({ height: height - 2 * parseInt(subtitle.css("margin-top")) });
+        subtitle.css({ marginBottom: subtitle.css("margin-top"), width: width - height + subtitle.height() });
+        line.css({ marginTop: subtitle.css("margin-top"), width: 1 }).css({ height: height - 2 * parseInt(line.css("margin-top")) });
+        line.css({ marginLeft: (function (m) { return function () { return $(this).hasClass("left") ? m : (width - m - 1) }; })(Math.floor(width * 0.15)) });
+        close.css({ width: parseInt(width * 0.02), marginTop: parseInt(subtitle.css("margin-top")) - height }).css({ height: 3 * close.width() });
     },
     _resizeSubtitle: function (subtitle, width, height)
     {
-        var table = subtitle.children("table.subtitle");
-        var rows = table.find("tr:visible");
-        var time = rows.first().children("td.time");
+        var ul = subtitle.find("ul.subtitle");
+        var rows = ul.children("li.item");
+        var text = subtitle.find("p.text");
+        var circles = subtitle.find("p.circle");
+        var time = subtitle.find("span.time");
+        var selector = subtitle.find("a.selector");
+        var line = $("div#repeat div.line.left");
 
-        rows.css({ height: parseInt(height * 0.15) });
-        time.css({ width: parseInt(width * 0.1) });
+        rows.css({ borderRadius: parseInt(height * 0.02), height: parseInt(height * 0.15), marginBottom: Math.ceil(height * 0.005), width: parseInt(height * 1) });
+        text.css({ lineHeight: rows.height() + "px" });
+        circles.css({ height: parseInt(height * 0.007) * 2 }).css({ marginTop: -parseInt(0.5 * (rows.height() + circles.height())), width: circles.height() });
+        time.css({ height: parseInt(height * 0.012) * 2 + 1, fontSize: parseInt(height * 0.025) }).css({ lineHeight: time.css("height"), marginTop: -parseInt(0.5 * (rows.height() + time.height())) });
+        time.css({ width: line.offset().left - subtitle.offset().left + line.outerWidth() + Math.floor(0.5 * time.height()) });
+        selector.css({ boxShadow: this._getShadow(0, height * 0.012, "rgba(0,0,0,1)"), height: parseInt(rows.width() * 0.07) }).css({ borderRadius: selector.height(), width: selector.height() });
+
+        var circleMargin = -Math.ceil(circles.width() * 0.5);
+        var timeMargin = -(rows.offset().left - subtitle.offset().left + parseInt(rows.css("border-left-width")));
+        var selectorMargin = parseInt(rows.width() * 0.015);
+
+        circles.each(function (i, e) { (e = $(e)).hasClass("start") ? e.css({ marginLeft: circleMargin }) : e.css({ marginRight: circleMargin }); });
+        time.each(function (i, e) { (e = $(e)).hasClass("start") ? e.css({ marginLeft: timeMargin }) : e.css({ marginRight: timeMargin }); });
+        selector.each(function (i, e) { (e = $(e)).hasClass("start") ? e.css({ marginLeft: selectorMargin, marginTop: (-rows.height() + selectorMargin) }) : e.css({ marginRight: selectorMargin, marginTop: -(selectorMargin + selector.height()) }); });
     }
 };

@@ -29,13 +29,24 @@ div#control div.button a.button.disabled { opacity:0.5; }
 div#control div.volumn { background:#ffffff; margin:0px auto; margin-top:10px; position:relative; z-index:2; }
 div#control div.background { background:url(../images/videobackground.jpg) repeat-x; background-size:100% 100%; height:100%; left:0px; opacity:0.8; position:absolute; top:0px; width:100%; z-index:0; }
 
-div#repeat { background:#ffffff; position:absolute; z-index:3; }
+div#repeat { background:url(../images/bg.jpg) no-repeat; background-size:100% auto; position:absolute; z-index:3; }
 div#repeat a.outcrop { background:#ffffff url(../images/outcrop.png) no-repeat left center; background-size:auto 7%; cursor:default; position:absolute; }
 div#repeat a.close { background:red; cursor:default; display:block; float:right; }
 div#repeat a.close:hover { background:blue; }
-div#repeat div.subtitle { height:100%; overflow:hidden; }
+div#repeat div.line { background:url(../images/verticalgradient.png) repeat-x; background-size:auto 100%; position:absolute; width:1px; }
+div#repeat div.subtitle { margin:0px auto; overflow:hidden; }
 
-table.subtitle { width:100%; }
-table.subtitle td.start { border-right:solid 1px #ff0000; text-align:left; }
-table.subtitle td.end { border-left:solid 1px #ff0000; text-align:right; }
-table.subtitle td.text { background:red; background-size:auto 100%; text-align:center; }
+ul.subtitle { width:100%; }
+ul.subtitle *.start { float:left; }
+ul.subtitle *.end { float:right; }
+ul.subtitle li { background:rgba(255,255,255,0.6); margin:0px auto; }
+ul.subtitle p.text { text-align:center; }
+ul.subtitle p.circle { background:#000000; display:block; }
+ul.subtitle span.time { background:url(../images/circle.png) no-repeat center; background-size:auto 100%; display:block; text-align:center; }
+ul.subtitle span.time.start { background-position-x:right; }
+ul.subtitle span.time.end { background-position-x:left; }
+ul.subtitle a.selector { background:#ffffff; display:none; }
+ul.subtitle a.selector.drag { background:yellow; display:block; }
+ul.subtitle a.selector.plus { background:green; display:block; }
+ul.subtitle a.selector.minus { background:red; display:block; }
+ul.subtitle li.selected { background:gray; }
