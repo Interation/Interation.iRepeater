@@ -34,7 +34,7 @@ div#control a.button.disabled { opacity:0.5; }
 div#control div.volumn { background:#ffffff; margin:0px auto; margin-top:10px; position:relative; z-index:2; }
 div#control div.background { background:url(../images/videobackground.jpg) repeat-x; background-size:100% 100%; height:100%; left:0px; opacity:0.8; position:absolute; top:0px; width:100%; z-index:0; }
 
-div#repeat { background:url(../images/wood.jpg) no-repeat center; background-size:auto 100%; overflow:hidden; position:absolute; z-index:3; }
+div#repeat { background:url(../images/wood.jpg) no-repeat center; background-size:auto 100%; position:absolute; z-index:3; }
 div#repeat a.button { background:rgba(255,255,255,0.8) no-repeat center top; background-size:100% auto; cursor:default; display:block; float:left; }
 div#repeat a.button:hover { background-color:rgba(255,255,255,1); }
 div#repeat a.button.close { background-image:url(../images/x.png); background-position-y:center; }
@@ -58,5 +58,7 @@ ul.subtitle p.text { display:block; float:inherit; margin:0px auto; text-align:c
 ul.subtitle span.time { display:block; text-align:center; }
 ul.subtitle span.time.start { background-position-x:right; }
 ul.subtitle span.time.end { background-position-x:left; }
-ul.subtitle a.selector { background:rgba(255,255,255,0.5); display:none; height:100%; position:relative; width:100%; }
-ul.subtitle a.selector.holder { background:rgba(255,255,255,1); display:block; }
+ul.subtitle div.selector { overflow:visible; }
+ul.subtitle div.selector a { background:rgba(255,255,255,0.5); display:none; height:100%; width:100%; }
+ul.subtitle div.selector a.holder { display:block; }
+ul.subtitle div.selector a.active { position:absolute; }

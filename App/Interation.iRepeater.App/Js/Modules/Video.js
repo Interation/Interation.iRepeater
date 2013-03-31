@@ -426,11 +426,15 @@
                 this.__mousestart.moved = false;
                 break;
             case "a.selector.subtitle":
-                this.__mousestart.top = (function (t) { return isNaN(t) ? 0 : t; })(parseFloat(sender.css("top")));
-                this.__mousestart.left = (function (l) { return isNaN(l) ? 0 : l; })(parseFloat(sender.css("left")));
+                sender.addClass("active");
+                this.__mousestart.for = sender.parent().hasClass("start") ? "start" : "end";
                 this.__mousestart.rows = sender.parents("ul.subtitle").children("li[index]:visible");
-                this.__mousestart.scale = { height: (this.__mousestart.rows.height() + parseFloat(this.__mousestart.rows.css("margin-bottom"))), width: this.__mousestart.rows.width() };
                 this.__mousestart.offset = this.__mousestart.rows.offset();
+                this.__mousestart.scale =
+                {
+                    height: (this.__mousestart.rows.height() + parseFloat(this.__mousestart.rows.css("margin-bottom"))),
+                    width: this.__mousestart.rows.width()
+                };
                 break;
         }
     },
@@ -456,10 +460,8 @@
                 var rows = this.__mousestart.rows;
                 var scale = this.__mousestart.scale;
                 var offset = this.__mousestart.offset;
-                var top = this.__mousestart.top + event.pageY - _event.pageY;
-                var left = this.__mousestart.left + event.pageX - _event.pageX;
 
-                _sender.css({ left: left, top: top });
+                _sender.css({ marginLeft: event.pageX - _event.pageX, marginTop: event.pageY - _event.pageY });
 
                 this._hoverSubtitles(rows);
 
@@ -469,7 +471,7 @@
                     if (index > rows.length - 1) { index = rows.length - 1; }
                     else if (index < 0) { index = 0; }
 
-                    this._hoverSubtitles(rows, index, _sender.hasClass("end"));
+                    this._hoverSubtitles(rows, index, this.__mousestart.for == "end");
                 }
 
                 break;
@@ -551,7 +553,7 @@
     _refreshSubtitles: function (list)
     {
         list = list || $("div#repeat ul.subtitle>li:visible");
-        list.find("a.selector").removeClass("holder").css({ left: 0, top: 0 });
+        list.find("div.selector>a").removeClass("holder active").css({ marginLeft: 0, marginTop: 0 });
 
         if (list.length <= 1) { return; }
 
@@ -566,14 +568,15 @@
             switch (i)
             {
                 case 0:
-                    li.find("a.selector." + (li.next().hasClass("selected") ? "start" : "end")).addClass("holder");
+                    li.find("div.selector." + (li.next().hasClass("selected") ? "start" : "end")).children().addClass("holder");
                     break;
                 case list.length - 1:
-                    li.find("a.selector." + (li.prev().hasClass("selected") ? "end" : "start")).addClass("holder");
+                    li.find("div.selector." + (li.prev().hasClass("selected") ? "end" : "start")).children().addClass("holder");
                     break;
                 default:
-                    if (!li.next().hasClass("selected")) { li.find("a.selector.end").addClass("holder"); }
-                    if (!li.prev().hasClass("selected")) { li.find("a.selector.start").addClass("holder"); }
+                    /// 判断是否应该删除此分支
+                    if (!li.next().hasClass("selected")) { li.find("div.selector.end").children().addClass("holder"); }
+                    if (!li.prev().hasClass("selected")) { li.find("div.selector.start").children().addClass("holder"); }
                     break;
             }
 
@@ -724,7 +727,7 @@
             case "ul.subtitle":
                 sender.children("li").mousedown(function (event) { _this._mousedown(this, event); })
                                      .mouseup(function (event) { _this._mouseup(this, event); });
-                sender.find("a.selector").mousedown(function (event) { _this._mousedown(this, event); return false; });
+                sender.find("div.selector>a").mousedown(function (event) { _this._mousedown(this, event); return false; });
                 break;
         }
 
@@ -809,12 +812,14 @@
         var time = subtitle.find("span.time");
         var start = time.filter(".start");
         var end = time.filter(".end");
-        var selector = subtitle.find("a.selector");
+        var selector = subtitle.find("div.selector");
+        var holders = selector.children("a");
 
         rows.css({ borderRadius: parseInt(height * 0.02), height: parseInt(height * 0.15), marginBottom: Math.ceil(height * 0.005) }).last().css({ marginBottom: 0 });
         rows.css({ boxShadow: this._getShadow(rows.height() * 0.05, rows.height() * 0.2, "rgba(0,0,0,0.5)", true) });
         ul.css({ height: rows.length * (rows.height() + parseFloat(rows.css("margin-bottom"))) - parseInt(rows.css("margin-bottom")) });
-        selector.css({ boxShadow: this._getShadow(rows.height() * 0.02, rows.height() * 0.08, "rgba(0,0,0,0.5)"), height: parseInt(rows.height() * 0.38) }).css({ borderRadius: selector.height(), width: selector.height() });
+        selector.css({ height: parseInt(rows.height() * 0.38) }).css({ borderRadius: selector.height(), width: selector.height() });
+        holders.css({ borderRadius: selector.height(), boxShadow: this._getShadow(rows.height() * 0.02, rows.height() * 0.08, "rgba(0,0,0,0.5)"), height: selector.height(), width: selector.width() });
         time.css({ height: parseInt(height * 0.042), fontSize: parseInt(height * 0.02), padding: "0px " + parseInt(rows.height() * 0.75) + "px" }).css({ lineHeight: time.css("height") });
         text.css({ fontSize: parseInt(height * 0.022), height: rows.height(), lineHeight: rows.height() + "px", marginTop: -time.height() });
         end.css({ marginTop: -time.height() });
