@@ -14,39 +14,34 @@
         <span class="timer rest">0:00</span>
         <a class="button setting" href="javascript:void(0);">Preference</a>
     </div>
-    <div id="repeat">
-        <a class="outcrop" href="javascript:void(0);" id="outcrop">
-
-        </a>
-        <div class="line left">
-
-        </div>
-        <div class="line right">
-
-        </div>
+    <div id="repeat" style="display:none;">
         <div class="subtitle">
-            <ul class="subtitle">
+            <ul class="subtitle" for="ul.subtitle">
                 <li class="template" for="li.subtitle" style="display:none;">
+                    <span class="time start">00:00:00.000</span>
                     <p class="text"></p>
-                    <p class="circle start"></p>
-                    <p class="circle end"></p>
-                    <a class="selector start" for="a.subtitle" href="javascript:void(0);"></a>
-                    <a class="selector end" for="a.subtitle" href="javascript:void(0);"></a>
-                    <span class="time start"></span>
-                    <span class="time end"></span>
+                    <span class="time end">00:00:00.000</span>
+                    <a class="selector start" for="a.selector.subtitle" href="javascript:void(0);"></a>
+                    <a class="selector end" for="a.selector.subtitle" href="javascript:void(0);"></a>
                 </li>
             </ul>
         </div>
-        <a class="close" href="javascript:void(0);"></a>
+        <a class="button close" href="javascript:void(0);"></a>
+        <a class="button confirm" href="javascript:void(0);"></a>
+        <a class="button locate" href="javascript:void(0);"></a>
+        <a class="button clear" href="javascript:void(0);"></a>
     </div>
+    <ul id="subtitle">
+
+    </ul>
     <div id="setting" style="display:none;">
 
     </div>
     <div id="control" style="display:none;">
         <div class="button">
-            <a class="button nav last disabled" href="javascript:void(0);"></a>
-            <a class="button play" href="javascript:void(0);"></a>
-            <a class="button nav next disabled" href="javascript:void(0);"></a>
+            <a class="button repeat" href="javascript:void(0);"></a>
+            <a class="button play paused" href="javascript:void(0);"></a>
+            <a class="button toggler" href="javascript:void(0);"></a>
         </div>
         <div class="volumn"></div>
         <div class="background"></div>
@@ -58,8 +53,8 @@
     <script src="js/jquery-1.8.2-win8-1.0.min.js"></script>
     <script src="js/jquery.fileSystem.js"></script>
     <script src="js/jquery.slider.js"></script>
-    <script src="js/jquery.extensions.js"></script>
     <script src="js/jquery.draggazilla.js"></script>
+    <script src="js/jquery.extensions.js"></script>
     <script src="js/modules/video.js"></script>
     <script>$(function () { video.init(); });</script>
 </body>
