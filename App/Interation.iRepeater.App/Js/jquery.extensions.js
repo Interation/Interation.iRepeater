@@ -49,7 +49,7 @@
             var time = 0;
             var result = null;
 
-            if (result = text.match(/(\d{1,}):(\d{1,2}):(\d{1,2}).(\d{3})/))
+            if (result = text.match(/(\d+):(\d{1,2}):(\d{1,2}).(\d{3})/))
             {
                 time = parseInt(result[1]) * 3600 + parseInt(result[2]) * 60 + parseInt(result[3]) + parseInt(result[4]) * 0.001;
             }

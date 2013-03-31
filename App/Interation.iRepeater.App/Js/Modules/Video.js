@@ -15,6 +15,7 @@
                  .bind("selectstart", function () { return false; });
         $("div#control a.button").mousedown(function () { _this._toggleControllerActive(this, true); })
                                  .mouseup(function () { _this._toggleControllerActive(this, false); })
+                                 .mouseover(function () { _this._toggleControllerActive(this, true); })
                                  .mouseout(function () { _this._toggleControllerActive(this, false); })
                                  .bind("drag", function () { return false; });
         $("div#control a.play").click(function (event) { _this._togglePaypuse(); });
@@ -24,6 +25,7 @@
         $("div#repeat a.clear").click(function () { _this._clear(); });
         $("div#repeat a.confirm").click(function () { _this._repeat(); });
         $("div#repeat a.locate").click(function () { _this._locate(); });
+        $("ul#caption").click(function (event) { _this._click(this, event); });
 
         this._resizePage($(window).width(), $(window).height());
         this._sliderVolumn = this._generateVolumnSlider();
@@ -157,7 +159,7 @@
             else
             {
                 subtitles.eq(i).removeClass("located");
-                caption.children("li[index=" + i + "]").animate({ opacity: 0 }, function () { $(this).animate({ height: 0 }, function () { $(this).remove(); }); });
+                caption.children("li[index=" + i + "]").remove();
             }
         });
     },
@@ -171,6 +173,7 @@
             return;
         }
 
+        var _this = this;
         var dialogs = this._subtitle.dialogs;
         var start = parseInt(rows.first().attr("index"));
         var end = parseInt(rows.last().attr("index"));
@@ -191,9 +194,10 @@
 
         this._clear();
         this._toggleRepeating(true);
+        this._toggleRepeatWindow(false);
         this._togglePaypuse(true);
     },
-    _locate: function()
+    _locate: function ()
     {
         var ul = $("div#repeat ul.subtitle");
         var located = ul.children("li.located");
@@ -220,7 +224,7 @@
         }
 
     },
-    _clear: function()
+    _clear: function ()
     {
         var rows = $("div#repeat ul.subtitle>li.selected").removeClass("selected");
         this._refreshSubtitles();
@@ -314,7 +318,7 @@
 
         $.getFile(options);
     },
-    _resolveSubtitles: function(text)
+    _resolveSubtitles: function (text)
     {
         var _this = this;
         var nodes = $(text).find("add");
@@ -365,6 +369,7 @@
 
         return $("div.progress").slider(
         {
+            bar: { backgroundColor: "rgba(255,255,255,0.3)", foregroundColor: "rgba(255,255,255,1)" },
             start: start,
             end: end,
             value: current,
@@ -382,7 +387,7 @@
             scrollbar:
             {
                 line: { color: "rgba(255,255,255,0.5)", margin: Math.floor(width * 0.5), width: 1 },
-                holder: { borderRadius: width * 0.3, color: "#000000", length: width * 0.5, padding: 0.2 * width },
+                holder: { borderRadius: width * 0.3, color: "rgba(255,255,255,0.8)", length: width * 0.2, padding: 0.2 * width },
                 opacity: 0.9
             }
         };
@@ -516,6 +521,7 @@
         switch (sender.attr("for"))
         {
             case "video":
+            case "caption":
                 if ($("div#repeat").is(":visible")) { return; }
                 this._togglePanel();
                 break;
@@ -574,6 +580,51 @@
             found = true;
         });
     },
+    _togglePaypuse: function (state)
+    {
+        var video = $("video").get(0);
+        var handler = $("div#control a.play");
+        var play = (state == undefined) ? video.paused : state;
+
+        if (play)
+        {
+            video.play();
+            handler.removeClass("paused");
+            this._togglePanel(false);
+        }
+        else
+        {
+            video.pause();
+            handler.addClass("paused");
+            this._togglePanel(true);
+        }
+    },
+    _toggleRepeating: function (state)
+    {
+        var handler = $("div#control a.repeat");
+
+        if (this._repeatParameter == undefined)
+        {
+            handler.addClass("disabled");
+            return;
+        }
+
+        var video = $("video").get(0);
+        handler.removeClass("disabled");
+
+        this._repeating = state == undefined ? !this._repeating : state;
+
+        if (this._repeating && this._repeatParameter != undefined)
+        {
+            video.currentTime = this._repeatParameter.start;
+            handler.parent().addClass("highlight");
+            this._togglePaypuse(true);
+        }
+        else
+        {
+            handler.parent().removeClass("highlight");
+        }
+    },
     _togglePanel: function (visible, callback)
     {
         // 分析优化算法, 用一个 timer
@@ -618,65 +669,24 @@
             this.__togglingPanel = true;
         }
     },
-    _togglePaypuse: function (state)
-    {
-        var video = $("video").get(0);
-        var handler = $("div#control a.play");
-        var play = (state == undefined) ? video.paused : state;
-
-        if (play)
-        {
-            video.play();
-            handler.removeClass("paused");
-            this._togglePanel(false);
-        }
-        else
-        {
-            video.pause();
-            handler.addClass("paused");
-            this._togglePanel(true);
-        }
-    },
-    _toggleRepeating: function(state)
-    {
-        var handler = $("div#control a.repeat");
-
-        if (this._repeatParameter == undefined)
-        {
-            handler.addClass("disabled");
-            return;
-        }
-
-        var video = $("video").get(0);
-        handler.removeClass("disabled");
-
-        this._repeating = state == undefined ? !this._repeating : state;
-
-        if (this._repeating && this._repeatParameter != undefined)
-        {
-            video.currentTime = this._repeatParameter.start;
-            handler.addClass("repeating");
-        }
-        else
-        {
-            handler.removeClass("repeating");
-        }
-    },
-    _toggleRepeatWindow: function (visible)
+    _toggleRepeatWindow: function (visible, callback)
     {
         var _this = this;
-        var duration = 600;
+        var duration = 1000;
         var repeat = $("div#repeat");
 
         if (visible && $("div#header").is(":visible"))
         {
-            this._togglePanel(false, function () { _this._toggleRepeatWindow(visible); });
+            this._togglePanel(false, function () { _this._toggleRepeatWindow(visible, callback); });
             return;
         }
 
         if (visible)
         {
-            repeat.show().animate({ top: 0.5 * ($(window).height() - repeat.height()) }, duration);
+            repeat.show().animate({ top: 0.5 * ($(window).height() - repeat.height()) }, duration, function ()
+            {
+                if (typeof callback == "function") { callback(); }
+            });
         }
         else
         {
@@ -684,13 +694,16 @@
             {
                 $(this).hide();
                 if ($("video").get(0).paused) { _this._togglePanel(true); }
+                if (typeof callback == "function") { callback(); }
             });
         }
     },
-    _toggleControllerActive: function(sender, active)
+    _toggleControllerActive: function (sender, active)
     {
-        $(sender).parents("ul.button").children().removeClass("active");
-        if (active) { $(sender).parent().addClass("active"); }
+        sender = $(sender);
+        sender.parents("ul.button").children().removeClass("active");
+        if (sender.hasClass("disabled")) { return; }
+        if (active) { sender.parent().addClass("active"); }
     },
     _ended: function (sender, event)
     {
@@ -728,8 +741,8 @@
         video.css({ height: height, width: width });
         header.css({ height: parseInt((height + width) * 0.02), width: width }).css({ top: -header.height() });
         control.css({ width: parseInt((height + width) * 0.22) }).css({ height: parseInt(control.width() * 0.2) });
-        repeat.css({ height: parseInt(height * 0.8) }).css({ width: parseInt(repeat.height() * 1.2) }).css({ left: parseInt(0.5 * (width - repeat.width())), top: height });
-        repeat.css({ boxShadow: this._getShadow(0, width * 0.015, "rgba(0,0,0,0.5)") });
+        repeat.css({ height: parseInt(height * 0.6) }).css({ width: parseInt(repeat.height() * 1.5) }).css({ left: parseInt(0.5 * (width - repeat.width())), top: height });
+        repeat.css({ borderRadius: repeat.width() * 0.02, boxShadow: this._getShadow(0, width * 0.015, "rgba(0,0,0,0.5)") });
         caption.css({ bottom: parseInt(height * 0.1), textShadow: this._getShadow(0, height * 0.005, "rgba(0,0,0,1)"), width: width }).css({ left: parseInt(0.5 * (width - caption.width())) });
 
         this._resizeHeader(header, header.width(), header.height());
@@ -743,15 +756,15 @@
         var back = header.children("a.back");
         var setting = header.children("a.setting");
 
-        var progressWidth = parseInt(width * 0.8);
-        var timerWidth = parseInt(width * 0.05);
+        var progressWidth = parseInt(width * 0.75);
+        var timerWidth = parseInt(width * 0.07);
         var buttonMargin = parseInt(width * 0.005);
 
         progress.css({ height: parseInt(height * 0.2), width: progressWidth }).css({ marginTop: parseInt(0.5 * (height - progress.height())) });
-        timer.css({ fontSize: height * 0.3, height: height, lineHeight: height + "px", width: timerWidth });
-        back.css({ height: parseInt(height * 0.7), marginLeft: buttonMargin, marginRight: buttonMargin, width: parseInt(0.5 * (width - 2 * timerWidth - 4 * buttonMargin - progressWidth)) });
+        timer.css({ fontSize: height * 0.28, height: height, lineHeight: height + "px", width: timerWidth });
+        back.css({ fontSize: height * 0.26, height: parseInt(height * 0.7), marginLeft: buttonMargin, marginRight: buttonMargin, width: parseInt(0.5 * (width - 2 * timerWidth - 4 * buttonMargin - progressWidth)) });
         back.css({ lineHeight: back.height() + "px", marginTop: parseInt(0.5 * (height - back.height())) });
-        setting.css({ height: back.height(), lineHeight: back.css("line-height"), marginLeft: buttonMargin, marginRight: buttonMargin, marginTop: back.css("margin-top"), width: back.width() });
+        setting.css({ fontSize: height * 0.26, height: back.height(), lineHeight: back.css("line-height"), marginLeft: buttonMargin, marginRight: buttonMargin, marginTop: back.css("margin-top"), width: back.width() });
     },
     _resizeControl: function (control, width, height)
     {
@@ -781,12 +794,12 @@
         subtitle.css({ width: width - parseInt(subtitle.css("margin-left")) - parseInt(subtitle.css("margin-right")) });
         ul.css({ padding: "0px " + (parseInt(width * 0.025) * 2 + 1) + "px" }).css({ width: (subtitle.width() - 2 * parseInt(ul.css("padding-left"))) });
 
-        var borderRadius = "0px " + height * 0.01 + "px " + height * 0.01 + "px 0px";
+        var borderRadius = "0px " + height * 0.008 + "px " + height * 0.008 + "px 0px";
 
-        close.css({ borderRadius: borderRadius, width: Math.floor(0.7 * parseInt(ul.css("padding-left"))), marginTop: parseInt(subtitle.css("margin-top")) - height }).css({ height: 2 * close.width() });
+        close.css({ borderRadius: borderRadius, width: Math.floor(0.6 * parseInt(ul.css("padding-left"))), marginTop: parseInt(subtitle.css("margin-top")) - height }).css({ height: 2 * close.width() });
         confirm.css({ borderRadius: borderRadius, width: close.width() }).css({ height: 3 * confirm.width() }).css({ marginTop: -parseInt(subtitle.css("margin-bottom")) - confirm.height() });
         locate.css({ borderRadius: borderRadius, width: close.width() }).css({ height: 2 * locate.width() }).css({ marginTop: parseInt(confirm.css("margin-top")) - locate.height() - 0.5 * parseInt(ul.css("padding-left")) });
-        clear.css({ width: confirm.width() }).css({ borderRadius: borderRadius, height: clear.width() }).css({ marginTop: parseInt(locate.css("margin-top")) - clear.height() - 0.5 * parseInt(ul.css("padding-left")) });
+        clear.css({ width: close.width() }).css({ borderRadius: borderRadius, height: clear.width() }).css({ marginTop: parseInt(locate.css("margin-top")) - clear.height() - 0.5 * parseInt(ul.css("padding-left")) });
     },
     _resizeSubtitle: function (subtitle, width, height)
     {
@@ -811,6 +824,6 @@
     },
     _resizeCaption: function (caption, width)
     {
-        caption.css({ height: width * 0.035, fontSize: width * 0.025 });
+        caption.css({ height: width * 0.025, fontSize: width * 0.02 });
     }
 };

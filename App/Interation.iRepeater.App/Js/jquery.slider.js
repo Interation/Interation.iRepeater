@@ -10,7 +10,7 @@
         options.value = options.value || 0;
         options.bar = options.bar || {};
         options.bar.backgroundColor = options.bar.backgroundColor || "#cccccc";
-        options.bar.foregroundColor = options.bar.foregroundColro || "#777777";
+        options.bar.foregroundColor = options.bar.foregroundColor || "#777777";
         options.controller = options.controller || {};
         options.controller.backgroundColor = options.controller.backgroundColor || "#0000ff";
 
@@ -34,15 +34,15 @@
 
             this.target.bind("selectstart", function () { return false; });
 
-            this.bar = $("<div></div>").addClass("jquery-slider-bar").appendTo(this.target);
+            this.bar = $("<div></div>").addClass("ui-slider-bar").appendTo(this.target);
             this.bar.css({ backgroundColor: this.options.bar.backgroundColor, borderRadius: this.height, height: this.height, overflow: "hidden", width: this.width });
             this.bar.mousedown(function (event) { _this._mousedown(this, event); }).bind("drag", function () { return false; });
 
-            this.innerBar = $("<div></div>").addClass("jquery-slider-innerbar").appendTo(this.bar);
-            this.innerBar.css({ background: this.options.bar.foregroundColor, borderRadius: 0, height: this.height, width: 0 });
+            this.innerBar = $("<div></div>").addClass("ui-slider-innerbar").appendTo(this.bar);
+            this.innerBar.css({ backgroundColor: this.options.bar.foregroundColor, borderRadius: 0, height: this.height, width: 0 });
             this.innerBar.bind("drag", function () { return false; });
 
-            this.controller = $("<a></a>").addClass("jquery-slider-controller").attr({ href: "javascript:void(0);" }).appendTo(this.target);
+            this.controller = $("<a></a>").addClass("ui-slider-controller").attr({ href: "javascript:void(0);" }).appendTo(this.target);
             this.controller.css({ backgroundColor: controllerBackground, borderRadius: this.controllerRadius * 2, height: 2 * this.controllerRadius, position: "absolute", width: 2 * this.controllerRadius });
             this.controller.css({ marginLeft: -this.controllerRadius, marginTop: -2 * this.controllerRadius + (this.controllerRadius - 0.5 * this.height) });
             this.controller.mousedown(function (event) { _this._mousedown(this, event); }).bind("drag", function () { return false; });
@@ -115,7 +115,7 @@
             this._sliding = true;
             this._mouseStart = { pageX: event.pageX };
 
-            if (sender.hasClass("jquery-slider-controller"))
+            if (sender.hasClass("ui-slider-controller"))
             {
                 this._positionStart = { left: parseInt(sender.css("margin-left")) + this.controllerRadius };
             }

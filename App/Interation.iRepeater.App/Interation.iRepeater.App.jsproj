@@ -72,8 +72,8 @@
     <Content Include="Images\Play.png" />
     <Content Include="Images\Player.png" />
     <Content Include="Images\PlayNav.png" />
+    <Content Include="Images\popup.png" />
     <Content Include="Images\R.png" />
-    <Content Include="Images\repeat-active.png" />
     <Content Include="Images\repeat.png" />
     <Content Include="Images\Search.png" />
     <Content Include="Images\smalllogo.png" />
