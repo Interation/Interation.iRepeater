@@ -61,6 +61,7 @@
     <Content Include="Images\C.png" />
     <Content Include="Images\circle.png" />
     <Content Include="Images\Clear.png" />
+    <Content Include="Images\cloud.png" />
     <Content Include="Images\FooterBackground.jpg" />
     <Content Include="Images\Gradual.jpg" />
     <Content Include="Images\HeaderBackground.jpg" />
@@ -72,6 +73,7 @@
     <Content Include="Images\Player.png" />
     <Content Include="Images\PlayNav.png" />
     <Content Include="Images\R.png" />
+    <Content Include="Images\repeat-active.png" />
     <Content Include="Images\repeat.png" />
     <Content Include="Images\Search.png" />
     <Content Include="Images\smalllogo.png" />

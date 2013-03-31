@@ -22,7 +22,7 @@
         options.scrollbar.holder.borderRadius = isNaN(options.scrollbar.holder.borderRadius) ? 0 : options.scrollbar.holder.borderRadius;
         options.scrollbar.holder.color = options.scrollbar.holder.color || "#000000";
         options.scrollbar.opacity = isNaN(options.scrollbar.opacity) ? 0.5 : options.scrollbar.opacity;
- 
+
         this.options = options;
     };
 
@@ -45,7 +45,7 @@
             {
                 this._generateScrollbar();
             }
-            
+
             if (this.options.drag.can)
             {
                 this.sender.mousedown(function (event) { _this._mousedown(this, event); });
@@ -74,9 +74,13 @@
                 if (this._height <= this._containerHeight) { this._scrollY.parent().hide(); }
                 else { this._scrollY.css({ height: this._getScrollbarLength(this._containerHeight, this._height) }).parent().show(); }
 
-                this._setScrollbarMargin("x", this._convertToScrollbarMargin("x", this._setMargin("x", parseFloat(this._scrollX.css("margin-left")))));
-                this._setScrollbarMargin("y", this._convertToScrollbarMargin("y", this._setMargin("y", parseFloat(this._scrollY.css("margin-top")))));
+                this.scrollTo("x", parseFloat(this._scrollX.css("margin-left")));
+                this.scrollTo("y", parseFloat(this._scrollY.css("margin-top")));
             }
+        },
+        scrollTo: function (direction, margin)
+        {
+            this._setScrollbarMargin(direction, this._convertToScrollbarMargin(direction, this._setMargin(direction, margin)));
         },
         _mousedown: function (sender, event)
         {
@@ -96,7 +100,7 @@
                     break;
             }
         },
-        _mouseup: function(sender, event)
+        _mouseup: function (sender, event)
         {
             this._mousestart = null;
         },
@@ -127,6 +131,50 @@
 
                     break;
             }
+
+            this._toggleScrollbarOpacity(true);
+        },
+        _toggleScrollbarOpacity: function (visible)
+        {
+            var _this = this;
+            clearTimeout(this.__toggleScrollbarOpacityTimer);
+            visible = visible == undefined ? (this._scrollXContainer.css("opacity") == "0") : visible;
+
+            if (this.__togglingScrollbarOpacity)
+            {
+                this.__toggleScrollbarOpacityTimer = setTimeout(function ()
+                {
+                    _this._toggleScrollbarOpacity(visible);
+                }, 2000);
+
+                return;
+            }
+
+            $(this._scrollXContainer).animate(
+            {
+                opacity: visible ? this.options.scrollbar.opacity : 0
+            },
+            {
+                step: function (opacity)
+                {
+                    $(_this._scrollYContainer).css({ opacity: opacity });
+                },
+                complete: function ()
+                {
+                    _this.__togglingScrollbarOpacity = false;
+
+                    if (visible)
+                    {
+                        clearTimeout(_this.__toggleScrollbarOpacityTimer);
+                        _this.__toggleScrollbarOpacityTimer = setTimeout(function ()
+                        {
+                            _this._toggleScrollbarOpacity(false);
+                        }, 2000);
+                    }
+                }
+            });
+
+            this.__togglingScrollbarOpacity = true;
         },
         _convertFromScrollbarMargin: function (direction, margin)
         {
@@ -223,7 +271,7 @@
         {
             this._scrollYContainer = $("<div></div>");
             this._scrollYContainer.addClass("ui-draggazilla-line ui-draggazilla-line-y");
-            this._scrollYContainer.css({ background: this.options.scrollbar.line.color, float: "right", height: this._containerHeight, marginRight: this.options.scrollbar.line.margin, marginTop: -this._containerHeight, width: this.options.scrollbar.line.width });
+            this._scrollYContainer.css({ background: this.options.scrollbar.line.color, float: "right", height: this._containerHeight, marginRight: this.options.scrollbar.line.margin, marginTop: -this._containerHeight, opacity: 0, width: this.options.scrollbar.line.width });
             this._scrollYContainer.hide().appendTo(this._parent);
 
             this._scrollY = $("<div></div>");
@@ -233,7 +281,7 @@
 
             this._scrollXContainer = $("<div></div>");
             this._scrollXContainer.addClass("ui-draggazilla-line ui-draggazilla-line-x");
-            this._scrollXContainer.css({ background: this.options.scrollbar.line.color, float: "left", height: this.options.scrollbar.line.width, marginTop: -(this.options.scrollbar.line.width + this.options.scrollbar.line.margin), width: this._containerWidth });
+            this._scrollXContainer.css({ background: this.options.scrollbar.line.color, float: "left", height: this.options.scrollbar.line.width, marginTop: -(this.options.scrollbar.line.width + this.options.scrollbar.line.margin), opacity: 0, width: this._containerWidth });
             this._scrollXContainer.hide().appendTo(this._parent);
 
             this._scrollX = $("<div></div>");

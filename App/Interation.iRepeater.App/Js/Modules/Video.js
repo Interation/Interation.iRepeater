@@ -13,12 +13,17 @@
                  .mousemove(function (event) { _this._mousemove(this, event); })
                  .mouseup(function (event) { _this._mouseup(this, event); })
                  .bind("selectstart", function () { return false; });
+        $("div#control a.button").mousedown(function () { _this._toggleControllerActive(this, true); })
+                                 .mouseup(function () { _this._toggleControllerActive(this, false); })
+                                 .mouseout(function () { _this._toggleControllerActive(this, false); })
+                                 .bind("drag", function () { return false; });
         $("div#control a.play").click(function (event) { _this._togglePaypuse(); });
         $("div#control a.toggler").click(function (event) { _this._toggleRepeatWindow(true); });
         $("div#control a.repeat").click(function (event) { _this._toggleRepeating(); });
         $("div#repeat a.close").click(function () { _this._toggleRepeatWindow(false); });
         $("div#repeat a.clear").click(function () { _this._clear(); });
         $("div#repeat a.confirm").click(function () { _this._repeat(); });
+        $("div#repeat a.locate").click(function () { _this._locate(); });
 
         this._resizePage($(window).width(), $(window).height());
         this._sliderVolumn = this._generateVolumnSlider();
@@ -117,7 +122,7 @@
 
         if (this._subtitle != undefined && this._subtitle.dialogs != undefined)
         {
-            setTimeout(function () { _this._subtitleUpdate(sender, _this._subtitle.dialogs); });
+            setTimeout(function () { _this._captionUpdate(sender, _this._subtitle.dialogs); });
         }
 
         $("span.timer.current").text($.formatTime(sender.currentTime));
@@ -125,31 +130,34 @@
 
         this._sliderProgress.setValue(sender.currentTime);
     },
-    _subtitleUpdate: function (video, dialogs)
+    _captionUpdate: function (video, dialogs)
     {
         if (dialogs == undefined) { return; }
         video = video || $("video").get(0);
 
+        var _this = this;
         var time = video.currentTime;
-        var subtitle = $("ul#subtitle");
-        var selectors = $("div#repeat ul.subtitle>li:visible");
+        var caption = $("ul#caption");
+        var subtitles = $("div#repeat ul.subtitle>li:visible");
 
         $.each(dialogs, function (i, e)
         {
             if (time >= e.start && time <= e.end)
             {
-                selectors.eq(i).addClass("located");
-                if (subtitle.children("li[index=" + i + "]").length == 0)
+                subtitles.eq(i).addClass("located");
+                if (caption.children("li[index=" + i + "]").length == 0)
                 {
-                    var li = $("<li></li>").attr("index", i).text(e.texts[0]).hide().appendTo(subtitle);
+                    var li = $("<li></li>").attr("index", i).text(e.texts[0]).hide().appendTo(caption);
+                    _this._resizeCaption(li, caption.width());
+
                     var height = li.height();
                     li.css({ height: 0 }).show().animate({ height: height });
                 }
             }
             else
             {
-                selectors.eq(i).removeClass("located");
-                subtitle.children("li[index=" + i + "]").animate({ opacity: 0 }, function () { $(this).animate({ height: 0 }, function () { $(this).remove(); }); });
+                subtitles.eq(i).removeClass("located");
+                caption.children("li[index=" + i + "]").animate({ opacity: 0 }, function () { $(this).animate({ height: 0 }, function () { $(this).remove(); }); });
             }
         });
     },
@@ -181,9 +189,36 @@
 
         $("video").get(0).currentTime = this._repeatParameter.start;
 
+        this._clear();
         this._toggleRepeating(true);
         this._togglePaypuse(true);
-        this._toggleRepeatWindow(false);
+    },
+    _locate: function()
+    {
+        var ul = $("div#repeat ul.subtitle");
+        var located = ul.children("li.located");
+
+        if (located.length > 0)
+        {
+            this._draggazillaSubtitle.scrollTo("y", ul.offset().top - located.offset().top);
+            return;
+        }
+
+        var rows = ul.children("li:visible");
+        var currentTime = video.currentTime || 0;
+
+        for (var i = 0; i < rows.length; i++)
+        {
+            var row = $(rows[i]);
+
+            var start = $.reverseFormatTime(row.find("span.start").text());
+            if (start >= currentTime)
+            {
+                this._draggazillaSubtitle.scrollTo("y", ul.offset().top - row.offset().top);
+                break;
+            }
+        }
+
     },
     _clear: function()
     {
@@ -347,7 +382,8 @@
             scrollbar:
             {
                 line: { color: "rgba(255,255,255,0.5)", margin: Math.floor(width * 0.5), width: 1 },
-                holder: { borderRadius: width, color: "#000000", padding: 0.3 * width }
+                holder: { borderRadius: width * 0.3, color: "#000000", length: width * 0.5, padding: 0.2 * width },
+                opacity: 0.9
             }
         };
 
@@ -566,14 +602,14 @@
 
             if (!$("video").get(0).paused)
             {
-                this._timer.hideTogglePanel = setTimeout(function () { _this._togglePanel(false); }, 3 * duration);
+                this._timer.hideTogglePanel = setTimeout(function () { _this._togglePanel(false); }, 10 * duration);
             }
         }
         else
         {
             if (this.__operating)
             {
-                this._timer.waitOperatingComplete = setTimeout(function () { _this._togglePanel(false); }, 3 * duration);
+                this._timer.waitOperatingComplete = setTimeout(function () { _this._togglePanel(false); }, 10 * duration);
                 return;
             }
 
@@ -603,13 +639,16 @@
     },
     _toggleRepeating: function(state)
     {
+        var handler = $("div#control a.repeat");
+
         if (this._repeatParameter == undefined)
         {
+            handler.addClass("disabled");
             return;
         }
 
         var video = $("video").get(0);
-        var handler = $("div#control a.repeat");
+        handler.removeClass("disabled");
 
         this._repeating = state == undefined ? !this._repeating : state;
 
@@ -648,6 +687,11 @@
             });
         }
     },
+    _toggleControllerActive: function(sender, active)
+    {
+        $(sender).parents("ul.button").children().removeClass("active");
+        if (active) { $(sender).parent().addClass("active"); }
+    },
     _ended: function (sender, event)
     {
         sender.pause();
@@ -678,7 +722,7 @@
         var header = $("div#header");
         var control = $("div#control");
         var repeat = $("div#repeat");
-        var subtitle = $("ul#subtitle");
+        var caption = $("ul#caption");
         var setting = $("div#setting");
 
         video.css({ height: height, width: width });
@@ -686,7 +730,7 @@
         control.css({ width: parseInt((height + width) * 0.22) }).css({ height: parseInt(control.width() * 0.2) });
         repeat.css({ height: parseInt(height * 0.8) }).css({ width: parseInt(repeat.height() * 1.2) }).css({ left: parseInt(0.5 * (width - repeat.width())), top: height });
         repeat.css({ boxShadow: this._getShadow(0, width * 0.015, "rgba(0,0,0,0.5)") });
-        subtitle.css({ bottom: parseInt(height * 0.1), textShadow: this._getShadow(0, height * 0.005, "rgba(0,0,0,1)"), width: parseInt(width * 0.5) }).css({ left: parseInt(0.5 * (width - subtitle.width())) });
+        caption.css({ bottom: parseInt(height * 0.1), textShadow: this._getShadow(0, height * 0.005, "rgba(0,0,0,1)"), width: width }).css({ left: parseInt(0.5 * (width - caption.width())) });
 
         this._resizeHeader(header, header.width(), header.height());
         this._resizeControl(control, control.width(), control.height());
@@ -712,15 +756,16 @@
     _resizeControl: function (control, width, height)
     {
         var background = control.children("div.background");
-        var row = control.children("div.button");
-        var buttons = row.children("a.button");
+        var ul = control.children("ul.button");
+        var li = ul.children("li");
+        var buttons = li.children("a.button");
         var volumn = control.children("div.volumn");
 
         background.css({ opacity: background.css("opacity") });
-        row.css({ height: parseInt(height * 0.5), width: parseInt(width * 0.06) * 2 * buttons.length });
-        buttons.css({ height: parseInt(row.height() * 0.8) }).css({ width: buttons.height() });
-        buttons.css({ margin: (row.width() / 3 - buttons.width()) * 0.5, marginTop: parseInt(0.5 * (row.height() - buttons.height())), marginBottom: 0 });
-        volumn.css({ height: parseInt(row.height() * 0.2), width: parseInt(width * 0.7) });
+        li.css({ height: parseInt(height * 0.5) }).css({ padding: "0px " + parseInt(li.height() * 0.15) + "px", width: li.height() });
+        buttons.css({ margin: parseInt(li.height() * 0.12) }).css({ height: li.height() - 2 * parseInt(buttons.css("margin-left")) }).css({ width: buttons.height() });
+        ul.css({ height: li.outerHeight(), width: li.outerWidth() * li.length });
+        volumn.css({ height: parseInt(ul.height() * 0.2), width: parseInt(width * 0.7) });
         volumn.css({ borderRadius: volumn.height(), marginTop: parseInt(0.5 * (height * 0.5 - volumn.height())) });
     },
     _resizeRepeat: function (repeat, width, height)
@@ -763,5 +808,9 @@
 
         var selectorMargin = parseInt(rows.height() * 0.1);
         selector.each(function (i, e) { (e = $(e)).hasClass("start") ? e.css({ marginLeft: selectorMargin, marginTop: (-rows.height() + selectorMargin) }) : e.css({ marginRight: selectorMargin, marginTop: -(selectorMargin + selector.height()) }); });
+    },
+    _resizeCaption: function (caption, width)
+    {
+        caption.css({ height: width * 0.035, fontSize: width * 0.025 });
     }
 };
