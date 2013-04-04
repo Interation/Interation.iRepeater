@@ -8,7 +8,7 @@
         $("div.search a.clear").click(function () { _this._clearKeywords(); });
         $("div.header div.center a.button").click(function () { _this._selectHeader(this); }).eq(0).click();
         $("div.product").click(function (event) { });
-        $("input:text").watermark("搜索")
+        $("input:text").watermark(language.getValue("search"))
                        .focus(function (event) { _this._focus(this, event); })
                        .keypress(function (event) { _this._keypress(this, event); })
                        .bind("change propertychange input", function (event) { _this._change(this, event); })

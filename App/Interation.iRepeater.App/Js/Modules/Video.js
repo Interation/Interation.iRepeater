@@ -37,7 +37,7 @@
     {
         var json =
         {
-            url: "data/product.table",
+            url: config.productUrl,
             data: { id: this._getQueryStringId() },
             success: function (product)
             {
@@ -151,9 +151,7 @@
                 {
                     var li = $("<li></li>").attr("index", i).text(e.texts[0]).hide().appendTo(caption);
                     _this._resizeCaption(li, caption.width());
-
-                    var height = li.height();
-                    li.css({ height: 0 }).show().animate({ height: height });
+                    li.show();
                 }
             }
             else
@@ -190,12 +188,14 @@
             if (dialogs[i].end > this._repeatParameter.end) { this._repeatParameter.end = dialogs[i].end; }
         }
 
-        $("video").get(0).currentTime = this._repeatParameter.start;
-
         this._clear();
-        this._toggleRepeating(true);
-        this._toggleRepeatWindow(false);
-        this._togglePaypuse(true);
+
+        this._toggleRepeatWindow(false, function ()
+        {
+            $("video").get(0).currentTime = _this._repeatParameter.start;
+            _this._toggleRepeating(true);
+            _this._togglePaypuse(true);
+        });
     },
     _locate: function ()
     {
@@ -349,6 +349,7 @@
 
         return $("div.volumn").slider(
         {
+            bar: { backgroundColor: "rgba(0,0,0,0.5)", foregroundColor: "rgba(255,255,255,1)" },
             value: _this._getVolumn(),
             mousedown: function () { _this.__operating = true; },
             mouseup: function () { _this.__operating = false; },
@@ -387,7 +388,7 @@
             scrollbar:
             {
                 line: { color: "rgba(255,255,255,0.5)", margin: Math.floor(width * 0.5), width: 1 },
-                holder: { borderRadius: width * 0.3, color: "rgba(255,255,255,0.8)", length: width * 0.2, padding: 0.2 * width },
+                holder: { borderRadius: 0, color: "rgba(255,255,255,0.8)", length: width * 0.5, padding: 0.1 * width },
                 opacity: 0.9
             }
         };
@@ -426,15 +427,25 @@
                 this.__mousestart.moved = false;
                 break;
             case "a.selector.subtitle":
-                sender.addClass("active");
+                var container = sender.parents("div.subtitle");
+                var rows = container.find("li[index]:visible");
+
+                this.__mousestart.rows = rows;
+                this.__mousestart.offset = rows.offset();
+                this.__mousestart.containerOffset = container.offset();
                 this.__mousestart.for = sender.parent().hasClass("start") ? "start" : "end";
-                this.__mousestart.rows = sender.parents("ul.subtitle").children("li[index]:visible");
-                this.__mousestart.offset = this.__mousestart.rows.offset();
+                this.__mousestart.margin =
+                {
+                    left: event.pageX - sender.offset().left - 0.5 * sender.width(),
+                    top: event.pageY - sender.offset().top - 0.5 * sender.height()
+                };
                 this.__mousestart.scale =
                 {
-                    height: (this.__mousestart.rows.height() + parseFloat(this.__mousestart.rows.css("margin-bottom"))),
-                    width: this.__mousestart.rows.width()
+                    rowHeight: (rows.height() + parseFloat(rows.css("margin-bottom"))),
+                    height: container.height(),
+                    width: rows.width()
                 };
+                sender.addClass("active").css({ marginLeft: this.__mousestart.margin.left, marginTop: this.__mousestart.margin.top });
                 break;
         }
     },
@@ -459,15 +470,20 @@
             case "a.selector.subtitle":
                 var rows = this.__mousestart.rows;
                 var scale = this.__mousestart.scale;
+                var margin = this.__mousestart.margin;
                 var offset = this.__mousestart.offset;
+                var containerOffset = this.__mousestart.containerOffset;
 
-                _sender.css({ marginLeft: event.pageX - _event.pageX, marginTop: event.pageY - _event.pageY });
+                _sender.css({ marginLeft: margin.left + event.pageX - _event.pageX, marginTop: margin.top + event.pageY - _event.pageY });
 
                 this._hoverSubtitles(rows);
 
-                if ((event.pageX - offset.left) >= 0 && (event.pageX - offset.left) <= scale.width)
+                if ((event.pageX - offset.left) >= 0
+                    && (event.pageX - offset.left) <= scale.width
+                    && (event.pageY - containerOffset.top >= 0
+                    && (event.pageY - containerOffset.top <= scale.height)))
                 {
-                    var index = Math.floor((event.pageY - offset.top) / scale.height);
+                    var index = Math.floor((event.pageY - offset.top) / scale.rowHeight);
                     if (index > rows.length - 1) { index = rows.length - 1; }
                     else if (index < 0) { index = 0; }
 
@@ -542,8 +558,34 @@
 
         var startIndex = parseInt(selected.first().attr("index"));
         var endIndex = parseInt(selected.last().attr("index"));
-        var minimum = positive ? startIndex : Math.min(index, endIndex);
-        var maximum = positive ? Math.max(index, startIndex) : endIndex;
+        var minimum = 0, maximum = 0;
+
+        if (positive)
+        {
+            if (startIndex <= index)
+            {
+                minimum = startIndex;
+                maximum = index;
+            }
+            else
+            {
+                minimum = index;
+                maximum = startIndex - 1;
+            }
+        }
+        else
+        {
+            if (endIndex >= index)
+            {
+                minimum = index;
+                maximum = endIndex;
+            }
+            else
+            {
+                minimum = endIndex + 1;
+                maximum = index;
+            }
+        }
 
         for (var i = minimum; i <= maximum; i++)
         {
@@ -557,31 +599,12 @@
 
         if (list.length <= 1) { return; }
 
-        var found = false, selected = false;
+        var selected = list.filter(".selected");
+        var first = selected.first();
+        var last = selected.last();
 
-        $.each(list, function (i, li)
-        {
-            li = $(li);
-            selected = li.hasClass("selected");
-            if (!selected) { return !found; }
-
-            switch (i)
-            {
-                case 0:
-                    li.find("div.selector." + (li.next().hasClass("selected") ? "start" : "end")).children().addClass("holder");
-                    break;
-                case list.length - 1:
-                    li.find("div.selector." + (li.prev().hasClass("selected") ? "end" : "start")).children().addClass("holder");
-                    break;
-                default:
-                    /// 判断是否应该删除此分支
-                    if (!li.next().hasClass("selected")) { li.find("div.selector.end").children().addClass("holder"); }
-                    if (!li.prev().hasClass("selected")) { li.find("div.selector.start").children().addClass("holder"); }
-                    break;
-            }
-
-            found = true;
-        });
+        if (first.prev(":visible").length > 0 || first.get(0) != last.get(0)) { first.find("div.selector.start>a").addClass("holder"); }
+        if (last.next(":visible").length > 0 || first.get(0) != last.get(0)) { last.find("div.selector.end>a").addClass("holder");; }
     },
     _togglePaypuse: function (state)
     {
@@ -620,12 +643,12 @@
         if (this._repeating && this._repeatParameter != undefined)
         {
             video.currentTime = this._repeatParameter.start;
-            handler.parent().addClass("highlight");
+            handler.parents("li").addClass("highlight");
             this._togglePaypuse(true);
         }
         else
         {
-            handler.parent().removeClass("highlight");
+            handler.parents("li").removeClass("highlight");
         }
     },
     _togglePanel: function (visible, callback)
@@ -696,8 +719,8 @@
             repeat.animate({ top: $(window).height() }, duration, function ()
             {
                 $(this).hide();
-                if ($("video").get(0).paused) { _this._togglePanel(true); }
                 if (typeof callback == "function") { callback(); }
+                if ($("video").get(0).paused) { _this._togglePanel(true); }
             });
         }
     },
@@ -706,7 +729,7 @@
         sender = $(sender);
         sender.parents("ul.button").children().removeClass("active");
         if (sender.hasClass("disabled")) { return; }
-        if (active) { sender.parent().addClass("active"); }
+        if (active) { sender.parents("li").addClass("active"); }
     },
     _ended: function (sender, event)
     {
@@ -743,7 +766,7 @@
 
         video.css({ height: height, width: width });
         header.css({ height: parseInt((height + width) * 0.02), width: width }).css({ top: -header.height() });
-        control.css({ width: parseInt((height + width) * 0.22) }).css({ height: parseInt(control.width() * 0.2) });
+        control.css({ width: parseInt((height + width) * 0.22) }).css({ height: parseInt(control.width() * 0.22) });
         repeat.css({ height: parseInt(height * 0.6) }).css({ width: parseInt(repeat.height() * 1.5) }).css({ left: parseInt(0.5 * (width - repeat.width())), top: height });
         repeat.css({ borderRadius: repeat.width() * 0.02, boxShadow: this._getShadow(0, width * 0.015, "rgba(0,0,0,0.5)") });
         caption.css({ bottom: parseInt(height * 0.1), textShadow: this._getShadow(0, height * 0.005, "rgba(0,0,0,1)"), width: width }).css({ left: parseInt(0.5 * (width - caption.width())) });
@@ -756,8 +779,7 @@
     {
         var progress = header.children("div.progress");
         var timer = header.children("span.timer");
-        var back = header.children("a.back");
-        var setting = header.children("a.setting");
+        var buttons = header.children("a.button");
 
         var progressWidth = parseInt(width * 0.75);
         var timerWidth = parseInt(width * 0.07);
@@ -765,22 +787,21 @@
 
         progress.css({ height: parseInt(height * 0.2), width: progressWidth }).css({ marginTop: parseInt(0.5 * (height - progress.height())) });
         timer.css({ fontSize: height * 0.28, height: height, lineHeight: height + "px", width: timerWidth });
-        back.css({ fontSize: height * 0.26, height: parseInt(height * 0.7), marginLeft: buttonMargin, marginRight: buttonMargin, width: parseInt(0.5 * (width - 2 * timerWidth - 4 * buttonMargin - progressWidth)) });
-        back.css({ lineHeight: back.height() + "px", marginTop: parseInt(0.5 * (height - back.height())) });
-        setting.css({ fontSize: height * 0.26, height: back.height(), lineHeight: back.css("line-height"), marginLeft: buttonMargin, marginRight: buttonMargin, marginTop: back.css("margin-top"), width: back.width() });
+        buttons.css({ borderRadius: parseInt(height * 0.15) });
+        buttons.css({ fontSize: height * 0.26, height: parseInt(height * 0.7), marginLeft: buttonMargin, marginRight: buttonMargin, width: parseInt(0.5 * (width - 2 * timerWidth - 4 * buttonMargin - progressWidth)) });
+        buttons.css({ lineHeight: buttons.css("height"), marginTop: parseInt(0.5 * (height - buttons.height())) });
     },
     _resizeControl: function (control, width, height)
     {
-        var background = control.children("div.background");
         var ul = control.children("ul.button");
         var li = ul.children("li");
-        var buttons = li.children("a.button");
+        var cloud = li.children("div.cloud");
         var volumn = control.children("div.volumn");
 
-        background.css({ opacity: background.css("opacity") });
-        li.css({ height: parseInt(height * 0.5) }).css({ padding: "0px " + parseInt(li.height() * 0.15) + "px", width: li.height() });
-        buttons.css({ margin: parseInt(li.height() * 0.12) }).css({ height: li.height() - 2 * parseInt(buttons.css("margin-left")) }).css({ width: buttons.height() });
+        li.css({ height: parseInt(height * 0.5) }).css({ padding: "0px", width: li.height() });
         ul.css({ height: li.outerHeight(), width: li.outerWidth() * li.length });
+        cloud.css({ marginLeft: -(li.width() * 0.17) }).css({ width: li.width() + 2 * parseInt(cloud.css("margin-left")) });
+        cloud.css({ height: cloud.width(), marginTop: cloud.css("margin-left"), padding: -2 * parseInt(cloud.css("margin-left")) });
         volumn.css({ height: parseInt(ul.height() * 0.2), width: parseInt(width * 0.7) });
         volumn.css({ borderRadius: volumn.height(), marginTop: parseInt(0.5 * (height * 0.5 - volumn.height())) });
     },
@@ -814,15 +835,17 @@
         var end = time.filter(".end");
         var selector = subtitle.find("div.selector");
         var holders = selector.children("a");
+        var locate = subtitle.find("div.locate");
 
         rows.css({ borderRadius: parseInt(height * 0.02), height: parseInt(height * 0.15), marginBottom: Math.ceil(height * 0.005) }).last().css({ marginBottom: 0 });
         rows.css({ boxShadow: this._getShadow(rows.height() * 0.05, rows.height() * 0.2, "rgba(0,0,0,0.5)", true) });
         ul.css({ height: rows.length * (rows.height() + parseFloat(rows.css("margin-bottom"))) - parseInt(rows.css("margin-bottom")) });
         selector.css({ height: parseInt(rows.height() * 0.38) }).css({ borderRadius: selector.height(), width: selector.height() });
         holders.css({ borderRadius: selector.height(), boxShadow: this._getShadow(rows.height() * 0.02, rows.height() * 0.08, "rgba(0,0,0,0.5)"), height: selector.height(), width: selector.width() });
-        time.css({ height: parseInt(height * 0.042), fontSize: parseInt(height * 0.02), padding: "0px " + parseInt(rows.height() * 0.75) + "px" }).css({ lineHeight: time.css("height") });
-        text.css({ fontSize: parseInt(height * 0.022), height: rows.height(), lineHeight: rows.height() + "px", marginTop: -time.height() });
+        time.css({ height: parseInt(height * 0.08), fontSize: parseInt(width * 0.015), padding: "0px " + parseInt(rows.height() * 0.75) + "px" }).css({ lineHeight: time.css("height") });
+        text.css({ fontSize: parseInt(width * 0.016), height: rows.height(), lineHeight: rows.height() + "px", marginTop: -time.height() });
         end.css({ marginTop: -time.height() });
+        locate.css({ height: parseInt(rows.height() * 0.5), marginLeft: parseInt(width * 0.05), marginTop: -(rows.height() * 0.6) }).css({ width: locate.height() });
 
         var selectorMargin = parseInt(rows.height() * 0.1);
         selector.each(function (i, e) { (e = $(e)).hasClass("start") ? e.css({ marginLeft: selectorMargin, marginTop: (-rows.height() + selectorMargin) }) : e.css({ marginRight: selectorMargin, marginTop: -(selectorMargin + selector.height()) }); });

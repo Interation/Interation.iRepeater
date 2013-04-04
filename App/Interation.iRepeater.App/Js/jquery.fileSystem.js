@@ -6,7 +6,9 @@
         {
             options = options || {};
             options.url = options.url || "";
+
             var url = new Windows.Foundation.Uri("ms-appx:///" + options.url);
+
             Windows.Storage.StorageFile.getFileFromApplicationUriAsync(url).then(function (file)
             {
                 Windows.Storage.FileIO.readTextAsync(file).then(function (text)
@@ -15,12 +17,22 @@
                     {
                         options.success(text);
                     }
+
+                    if (typeof options.complete == "function")
+                    {
+                        options.complete();
+                    }
                 });
             }, function (response)
             {
                 if (typeof options.error == "function")
                 {
                     options.error(response);
+                }
+
+                if (typeof options.complete == "function")
+                {
+                    options.complete();
                 }
             });
         },

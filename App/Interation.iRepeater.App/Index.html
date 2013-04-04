@@ -236,7 +236,13 @@
     <script src="js/jquery-1.8.2-win8-1.0.min.js"></script>
     <script src="js/jquery.extensions.js"></script>
     <script src="js/jquery.draggazilla.js"></script>
+    <script src="js/base/core/config.js"></script>
+    <script src="js/base/core/config.lang.js"></script>
+    <script src="js/base/foundation/utility.js"></script>
+    <script src="js/base/foundation/utility.storage.js"></script>
+    <script src="js/base/service/console.js"></script>
+    <script src="js/base/service/language.js"></script>
     <script src="js/modules/index.js"></script>
-    <script>$(function () { index.init(); });</script>
+    <script>$(function () { console.start(function () { index.init(); }); });</script>
 </body>
 </html>

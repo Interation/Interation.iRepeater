@@ -14,6 +14,29 @@
         <span class="timer rest">0:00</span>
         <a class="button setting" href="javascript:void(0);">Preference</a>
     </div>
+    <ul for="caption" id="caption">
+
+    </ul>
+    <div id="control" style="display:none;">
+        <ul class="button">
+            <li>
+                <div class="cloud">
+                    <a class="button repeat disabled" href="javascript:void(0);"></a>
+                </div>
+            </li>
+            <li>
+                <div class="cloud">
+                    <a class="button play paused" href="javascript:void(0);"></a>
+                </div>
+            </li>
+            <li>
+                <div class="cloud">
+                    <a class="button toggler" href="javascript:void(0);"></a>
+                </div>
+            </li>
+        </ul>
+        <div class="volumn"></div>
+    </div>
     <div id="repeat" style="display:none;">
         <div class="subtitle">
             <ul class="subtitle" for="ul.subtitle">
@@ -31,6 +54,7 @@
                     <div class="selector end">
                         <a for="a.selector.subtitle" href="javascript:void(0);"></a>
                     </div>
+                    <div class="locate"></div>
                 </li>
             </ul>
         </div>
@@ -39,20 +63,8 @@
         <a class="button locate" href="javascript:void(0);"></a>
         <a class="button clear" href="javascript:void(0);"></a>
     </div>
-    <ul for="caption" id="caption">
-
-    </ul>
     <div id="setting" style="display:none;">
 
-    </div>
-    <div id="control" style="display:none;">
-        <ul class="button">
-            <li><a class="button repeat disabled" href="javascript:void(0);"></a></li>
-            <li><a class="button play paused" href="javascript:void(0);"></a></li>
-            <li><a class="button toggler" href="javascript:void(0);"></a></li>
-        </ul>
-        <div class="volumn"></div>
-        <div class="background"></div>
     </div>
 
     <script src="//Microsoft.WinJS.1.0/js/base.js"></script>
@@ -63,7 +75,11 @@
     <script src="js/jquery.slider.js"></script>
     <script src="js/jquery.draggazilla.js"></script>
     <script src="js/jquery.extensions.js"></script>
-    <script src="js/modules/video.js"></script>
+    <script src="js/frameworks/core/config.js"></script>
+    <script src="js/frameworks/core/config.lang.js"></script>
+    <script src="js/frameworks/foundation/utility.js"></script>
+    <script src="js/frameworks/foundation/utility.lang.js"></script>
+    <script src="js/frameworks/service/video.js"></script>
     <script>$(function () { video.init(); });</script>
 </body>
 </html>

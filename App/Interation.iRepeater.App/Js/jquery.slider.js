@@ -12,7 +12,7 @@
         options.bar.backgroundColor = options.bar.backgroundColor || "#cccccc";
         options.bar.foregroundColor = options.bar.foregroundColor || "#777777";
         options.controller = options.controller || {};
-        options.controller.backgroundColor = options.controller.backgroundColor || "#0000ff";
+        options.controller.backgroundColor = options.controller.backgroundColor || "transparent";
 
         options.mousedown = options.mousedown || null;
         options.mouseup = options.mouseup || null;

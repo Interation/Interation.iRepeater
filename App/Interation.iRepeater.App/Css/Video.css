@@ -8,33 +8,34 @@ html table { border:none; border-collapse:collapse; margin:0px; padding:0px; }
 html tr { border:none; border-collapse:collapse; margin:0px; padding:0px; }
 html td { border:none; border-collapse:collapse; margin:0px; padding:0px; }
 
-.ui-slider-bar { box-shadow:3px 3px 8px #000000 inset; cursor:pointer; }
-.ui-slider-innerbar { box-shadow:3px 3px 8px #000000 inset; }
-
 video { background:#000000 url(../images/loading.gif) no-repeat center; height:100%; width:100%; }
 
-div#header { background:url(../images/videobackground.jpg) repeat-x; background-size:100% 100%; border-bottom:solid 1px #333333; left:0px; position:absolute; top:0px; width:100%; }
-div#header a.button { background:blue; color:#ffffff; cursor:default; border-radius:5px; display:block; float:left; height:70%; text-align:center; width:10%; }
+.ui-slider-controller { background:url(../images/holder.png) no-repeat; background-size:100% 100%; }
+
+div#header { background:url(../images/videobackground.png) repeat-x; background-size:100% 100%; border-bottom:solid 1px #333333; left:0px; position:absolute; top:0px; width:100%; }
+div#header a.button { background:url(../images/button.png) repeat-x; background-size:auto 100%; color:#ffffff; cursor:default; display:block; float:left; height:70%; text-align:center; width:10%; }
 div#header div.progress { float:left; }
 div#header span.timer { color:#ffffff; display:block; float:left; text-align:center; }
-div#header .ui-slider-bar { background:rgba(255,255,255,0.3); box-shadow:none; cursor:pointer; }
-div#header .ui-slider-innerbar { background:#ffffff; box-shadow:none; }
+div#header .ui-slider-bar { background:rgba(255,255,255,0.3); cursor:pointer; }
+div#header .ui-slider-innerbar { background:#ffffff; }
 
-div#control { border-radius:5px; box-shadow:#999999 0px 0px 2px; margin:0px auto; overflow:hidden; position:relative; }
-div#control ul.button { margin:0px auto; position:relative; z-index:1; }
+div#control { background:url(../images/videobackground.png) repeat-x; background-size:auto 100%; border-radius:5px; box-shadow:#999999 0px 0px 2px; margin:0px auto; position:relative; }
+div#control ul.button { margin:0px auto; }
 div#control ul.button>li { float:left; }
-div#control ul.button>li.active { background:url(../images/cloud.png) no-repeat; background-size:100% 100%; }
-div#control ul.button>li.highlight { background:url(../images/cloud.png) no-repeat; background-size:100% 100%; }
 div#control a.button { background:no-repeat center; background-size:auto 100%; cursor:default; display:block; height:100%; width:100%; }
 div#control a.button.play { background-image:url(../images/play.png); background-position-x:right; }
 div#control a.button.play.paused { background-position-x:left; }
 div#control a.button.repeat { background-image:url(../images/repeat.png); }
 div#control a.button.toggler { background-image:url(../images/popup.png); }
 div#control a.button.disabled { opacity:0.5; }
-div#control div.volumn { background:#ffffff; margin:0px auto; margin-top:10px; position:relative; z-index:2; }
-div#control div.background { background:url(../images/videobackground.jpg) repeat-x; background-size:100% 100%; height:100%; left:0px; opacity:0.8; position:absolute; top:0px; width:100%; z-index:0; }
+div#control div.cloud { background:no-repeat center; background-size:100% 100%; }
+div#control div.volumn { background:#ffffff; margin:0px auto; margin-top:10px; }
+div#control .ui-slider-bar { background:url(../images/sliderbarbackground.png) repeat-x; background-size:auto 100%; }
+div#control .ui-slider-innerbar { background:url(../images/sliderbarforeground.png) repeat-x; background-size:auto 100%; }
+div#control li.highlight div.cloud { background-image:url(../images/cloud1.png); }
+div#control li.active div.cloud { background-image:url(../images/cloud2.png); }
 
-div#repeat { background:url(../images/wood.jpg) no-repeat center; background-size:auto 100%; position:absolute; z-index:3; }
+div#repeat { background:url(../images/wood.jpg) no-repeat center; background-size:auto 100%; position:absolute; }
 div#repeat a.button { background:rgba(255,255,255,0.8) no-repeat center top; background-size:100% auto; cursor:default; display:block; float:left; }
 div#repeat a.button:hover { background-color:rgba(255,255,255,1); }
 div#repeat a.button.close { background-image:url(../images/x.png); background-position-y:center; }
@@ -49,16 +50,14 @@ ul#caption>li { display:block; text-align:center; width:100%; }
 ul.subtitle { cursor:default; display:block; margin:0px auto; }
 ul.subtitle *.start { float:left; }
 ul.subtitle *.end { float:right; }
-ul.subtitle li { background:rgba(255,255,255,0.6); display:block; float:left; width:100%; }
-ul.subtitle li.selected { background:rgba(255,0,0,0.6); }
-ul.subtitle li.pre { background:rgba(0,255,0,0.6); }
-ul.subtitle li.selected.pre { background:rgba(255,255,0,0.6); }
-ul.subtitle li.located { background:rgba(0,0,255,0.6); }
+ul.subtitle li { background:rgba(255,255,255,0.5); display:block; float:left; width:100%; }
 ul.subtitle p.text { display:block; float:inherit; margin:0px auto; text-align:center; width:100%; }
 ul.subtitle span.time { display:block; text-align:center; }
-ul.subtitle span.time.start { background-position-x:right; }
-ul.subtitle span.time.end { background-position-x:left; }
 ul.subtitle div.selector { overflow:visible; }
 ul.subtitle div.selector a { background:rgba(255,255,255,0.5); display:none; height:100%; width:100%; }
 ul.subtitle div.selector a.holder { display:block; }
 ul.subtitle div.selector a.active { position:absolute; }
+ul.subtitle div.locate { background:url(../images/l.png) no-repeat center; background-size:80% auto; display:none; }
+ul.subtitle li.located div.locate { display:block; }
+ul.subtitle li.selected { background:rgba(0,255,0,0.5); }
+ul.subtitle li.pre { background:rgba(255,0,0,0.5); }
