@@ -2,7 +2,7 @@
 
 body { background:#cbcbcb; font-size:12px; height:100%; margin:0px; overflow:hidden; }
 body a { cursor:default; text-decoration:none; }
-body h1 { }
+body h1 { margin:0px; padding:0px; }
 body h2 { margin:0px; padding:0px; }
 body h3 { margin:0px; padding:0px; }
 body p { margin:0px; padding:0px; }
@@ -20,7 +20,7 @@ div.header div.center { border-radius:5px; margin:0px auto; overflow:hidden; zoo
 div.header div.center a.button { color:#686d73; display:block; float:left; height:30px; line-height:30px; overflow:hidden; text-align:center; text-shadow:1px 1px #f0f0f0; width:100px; }
 div.header div.center a.button.shadow { background:#aaaaaa; color:#f2f2f2; text-shadow:none; }
 div.header div.search { background:#ffffff url(../images/search.png) no-repeat left center; background-size:auto 100%; box-shadow:rgba(0,0,0,0.5) 1px 2px 2px inset; float:right; height:44px; width:210px; }
-div.header div.search input { border:0px; float:left; padding:0px; width:150px; }
+div.header div.search input { border:0px; float:left; padding:0px; text-transform:capitalize; width:150px; }
 div.header div.search input.empty { color:#cccccc; }
 div.header div.search a.clear { background:url(../images/clear.png) no-repeat; background-size:contain; display:none; float:left; height:22px; width:22px; }
 div.header div.search.filled a.clear { display:block; }
@@ -55,4 +55,4 @@ div.classify ul.pages>li div.product.alter { background:#bbbbbb; }
 div.classify ul.navs { margin:15px auto; overflow:hidden; zoom:1; }
 div.classify ul.navs>li { background:#999999; border-radius:3px; box-shadow:rgba(0,0,0,0.5) 2px 2px 2px inset; display:block; float:left; height:6px; margin:5px; width:6px; }
 
-div.footer { background:url(../images/footerbackground.jpg) repeat-x; background-size:contain; width:100%; }
+div.footer { background:url(../images/footerbackground.jpg) repeat-x; background-size:auto 100%; width:100%; }

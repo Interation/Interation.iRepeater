@@ -53,6 +53,7 @@
     <AppxManifest Include="package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Css\Index.css" />
     <Content Include="Css\Video.css" />
     <Content Include="Data\Settings.db" />
     <Content Include="Data\Products.db" />
@@ -73,6 +74,7 @@
     <Content Include="Images\L1.png" />
     <Content Include="Images\Loading.gif" />
     <Content Include="Images\L.png" />
+    <Content Include="Images\loading1.gif" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\Outcrop.png" />
     <Content Include="Images\Play.png" />
@@ -96,14 +98,12 @@
     <Content Include="Images\X.png" />
     <Content Include="Images\YellowFeather.png" />
     <Content Include="Images\VideoBackground.jpg" />
-    <Content Include="Index.html" />
     <Content Include="Css\Global.css" />
+    <Content Include="Index.html" />
     <Content Include="Js\Base\Core\Config.js" />
-    <Content Include="Js\Base\Core\Config.Lang.js" />
-    <Content Include="Js\Base\Foundation\Utility.js" />
-    <Content Include="Js\Base\Foundation\Utility.Storage.js" />
-    <Content Include="Js\Base\Service\Console.js" />
-    <Content Include="Js\Base\Service\Language.js" />
+    <Content Include="Js\Base\Foundation\FileSystem.js" />
+    <Content Include="Js\Base\Service\ConsoleService.js" />
+    <Content Include="Js\Base\Service\SettingService.js" />
     <Content Include="Js\cordova-2.5.0.js" />
     <Content Include="Js\jquery-1.8.2-win8-1.0.min.js" />
     <Content Include="Js\jquery.draggazilla.js" />
@@ -130,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="Microsoft.WinJS.1.0, Version=1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
   <!-- To modify your build process, add your task inside one of the targets below then uncomment

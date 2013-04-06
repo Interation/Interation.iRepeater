@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EA088951-6D49-482A-98B2-749856B794E8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Interation.iRepeater.IOC</RootNamespace>
+    <AssemblyName>Interation.iRepeater.IOC</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ninject">
+      <HintPath>..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BindingModules\OtherBindingModule.cs" />
+    <Compile Include="BindingModules\RepositoryBindingModule.cs" />
+    <Compile Include="BindingModules\ServiceBindingModule.cs" />
+    <Compile Include="InjectionActionInvoker.cs" />
+    <Compile Include="InjectionControllerFactory.cs" />
+    <Compile Include="InjectionHttpApplication.cs" />
+    <Compile Include="InjectionRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Repository\Interation.iRepeater.Repository.IRepositoryProvider\Interation.iRepeater.Repository.IRepositoryProvider.csproj">
+      <Project>{40e44f81-5ae8-4946-bb74-27d20975eba0}</Project>
+      <Name>Interation.iRepeater.Repository.IRepositoryProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Repository\Interation.iRepeater.Repository.RepositoryImplementation\Interation.iRepeater.Repository.RepositoryImplementation.csproj">
+      <Project>{8b54abad-6deb-4983-8bef-a9a1685c0a40}</Project>
+      <Name>Interation.iRepeater.Repository.RepositoryImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Service\Interation.iRepeater.Service.IServiceProvider\Interation.iRepeater.Service.IServiceProvider.csproj">
+      <Project>{c5281cf9-e17a-4202-a4b9-0549fe9f5c65}</Project>
+      <Name>Interation.iRepeater.Service.IServiceProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Service\Interation.iRepeater.Service.ServiceImplementation\Interation.iRepeater.Service.ServiceImplementation.csproj">
+      <Project>{be3de179-39d9-48dc-9480-dc2067636c4b}</Project>
+      <Name>Interation.iRepeater.Service.ServiceImplementation</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

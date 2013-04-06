@@ -4,245 +4,39 @@
 <head>
     <title>iRepeater</title>
     <meta charset="utf-8" />
-    <link href="css/global.css" rel="stylesheet" />
+    <link href="css/index.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="header">
+    <div id="header" style="display:none;">
+        <h1>iRepeater</h1>
         <div class="search">
-            <input autocomplete="off" name="keywords" value="" />
+            <input autocomplete="off" class="keywords" name="keywords" value="" />
             <a class="clear" href="javascript:void(0);"></a>
         </div>
-        <div class="center shadow">
-            <a class="button" href="javascript:void(0);">新品推荐</a>
-            <a class="button" href="javascript:void(0);">发布时间</a>
+    </div>
+    <div id="main" style="display:none;">
+        <div class="loading" style="display:none;">
+            loading...
+        </div>
+        <div class="wrapper">
+
         </div>
     </div>
-    <div class="main">
-        <div class="banner">
-            <div class="displayer">
-                <a href="javascript:void(0);"><img alt="" src="resources/images/F201206111000432486213364.jpg" /></a>
-            </div>
-            <ul class="section">
-                <li><a href="javascript:void(0);"><img alt="" src="resources/images/F201206111000432486213364.jpg" /></a></li>
-                <li><a href="javascript:void(0);"><img alt="" src="resources/images/1-120225132335.jpg" /></a></li>
-                <li><a href="javascript:void(0);"><img alt="" src="resources/images/U1TwgCmtW_1290257963.jpg" /></a></li>
-                <li><a href="javascript:void(0);"><img alt="" src="images/logo.png" /></a></li>
-                <li><a href="javascript:void(0);"><img alt="" src="images/logo.png" /></a></li>
-                <li><a href="javascript:void(0);"><img alt="" src="images/logo.png" /></a></li>
-                <li><a href="javascript:void(0);"><img alt="" src="images/logo.png" /></a></li>
-                <li><a href="javascript:void(0);"><img alt="" src="images/logo.png" /></a></li>
-                <li><a href="javascript:void(0);"><img alt="" src="images/logo.png" /></a></li>
-                <li><a href="javascript:void(0);"><img alt="" src="images/logo.png" /></a></li>
-            </ul>
-        </div>
-        <div class="classify">
-            <p class="head">新品推荐</p>
-            <ul class="pages">
-                <li>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="video.html?id=1">免费</a>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-            <ul class="navs">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div>
-        <div class="classify">
-            <p class="head">时下热门</p>
-            <ul class="pages">
-                <li>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="icon">
-                            <img alt="" src="resources/images/1-120225132335.jpg" />
-                        </div>
-                        <div class="info">
-                            <p class="title">功夫熊猫</p>
-                            <p class="text"><span class="class">电影</span>: <span class="subClass">美剧</span></p>
-                            <p class="text">发布时间: <span>2012年01月01日</span></p>
-                            <p class="text star">100份评分</p>
-                        </div>
-                        <div class="action">
-                            <a href="javascript:void(0);">免费</a>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-            <ul class="navs">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div>
+    <div id="footer" style="display:none;">
+        <ul class="menu">
+            <li><a href="javascript:void(0);"></a></li>
+        </ul>
     </div>
-    <div class="footer"></div>
 
     <script src="js/cordova-2.5.0.js"></script>
     <script src="js/jquery-1.8.2-win8-1.0.min.js"></script>
     <script src="js/jquery.extensions.js"></script>
     <script src="js/jquery.draggazilla.js"></script>
     <script src="js/base/core/config.js"></script>
-    <script src="js/base/core/config.lang.js"></script>
-    <script src="js/base/foundation/utility.js"></script>
-    <script src="js/base/foundation/utility.storage.js"></script>
-    <script src="js/base/service/console.js"></script>
-    <script src="js/base/service/language.js"></script>
+    <script src="js/base/foundation/filesystem.js"></script>
+    <script src="js/base/service/consoleservice.js"></script>
+    <script src="js/base/service/settingservice.js"></script>
     <script src="js/modules/index.js"></script>
-    <script>$(function () { console.start(function () { index.init(); }); });</script>
+    <script>consoleService.start(function () { index.init(); });</script>
 </body>
 </html>

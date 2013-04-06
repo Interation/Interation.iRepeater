@@ -39,9 +39,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -122,11 +127,20 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\IOC\Interation.iRepeater.IOC\Interation.iRepeater.IOC.csproj">
+      <Project>{ea088951-6d49-482a-98b2-749856b794e8}</Project>
+      <Name>Interation.iRepeater.IOC</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interation.iRepeater.Web.Controllers\Interation.iRepeater.Web.Controllers.csproj">
       <Project>{f4db4e57-c524-438d-ab32-28ec018028a8}</Project>
       <Name>Interation.iRepeater.Web.Controllers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Interation.iRepeater.Web.ViewModel\Interation.iRepeater.Web.ViewModel.csproj">
+      <Project>{e8a114b9-2bf4-46f0-b4ae-a8dbfa9af34a}</Project>
+      <Name>Interation.iRepeater.Web.ViewModel</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

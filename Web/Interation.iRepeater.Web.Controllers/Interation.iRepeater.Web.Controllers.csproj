@@ -42,10 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HomeController.cs" />
+    <Compile Include="AppController.cs" />
+    <Compile Include="Extensions\ProductContractExtension.cs" />
+    <Compile Include="Extensions\TopicContractExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Service\Interation.iRepeater.Service.Contract\Interation.iRepeater.Service.Contract.csproj">
+      <Project>{5521b8ea-d1a5-469e-8dd7-c67f5d1d5365}</Project>
+      <Name>Interation.iRepeater.Service.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Service\Interation.iRepeater.Service.IServiceProvider\Interation.iRepeater.Service.IServiceProvider.csproj">
+      <Project>{c5281cf9-e17a-4202-a4b9-0549fe9f5c65}</Project>
+      <Name>Interation.iRepeater.Service.IServiceProvider</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interation.iRepeater.Web.ViewModel\Interation.iRepeater.Web.ViewModel.csproj">
       <Project>{e8a114b9-2bf4-46f0-b4ae-a8dbfa9af34a}</Project>
       <Name>Interation.iRepeater.Web.ViewModel</Name>

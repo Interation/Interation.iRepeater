@@ -39,9 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HomeViewModel.cs" />
+    <Compile Include="CategorieViewModel.cs" />
+    <Compile Include="ChartsViewModel.cs" />
+    <Compile Include="FeaturedViewModel.cs" />
+    <Compile Include="GeniusViewModel.cs" />
     <Compile Include="ProductViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PurchasedViewModel.cs" />
+    <Compile Include="SearchedViewModel.cs" />
+    <Compile Include="TopicViewModel.cs" />
+    <Compile Include="UpdatesViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

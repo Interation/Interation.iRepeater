@@ -1,4 +1,4 @@
-﻿utility.storage =
+﻿var fileSystem =
 {
     getFile: function (options)
     {
@@ -19,7 +19,6 @@
                 }
             }, function (response)
             {
-
             });
         }, function (response)
         {
