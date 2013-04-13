@@ -106,6 +106,7 @@
     <Content Include="Js\Base\Service\SettingService.js" />
     <Content Include="Js\cordova-2.5.0.js" />
     <Content Include="Js\jquery-1.8.2-win8-1.0.min.js" />
+    <Content Include="Js\jquery-1.9.1.min.js" />
     <Content Include="Js\jquery.draggazilla.js" />
     <Content Include="Js\jquery.extensions.js" />
     <Content Include="Js\jquery.fileSystem.js" />
@@ -130,9 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="Microsoft.WinJS.1.0, Version=1.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
   <!-- To modify your build process, add your task inside one of the targets below then uncomment

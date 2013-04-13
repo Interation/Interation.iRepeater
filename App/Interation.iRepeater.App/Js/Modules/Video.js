@@ -37,7 +37,7 @@
     {
         var json =
         {
-            url: config.productUrl,
+            url: config.paths.product,
             data: { id: this._getQueryStringId() },
             success: function (product)
             {
@@ -102,7 +102,7 @@
             }
         };
 
-        $.getFile(json);
+        fileSystem.getFile(json);
     },
     _getQueryStringId: function ()
     {
@@ -316,7 +316,7 @@
             }
         };
 
-        $.getFile(options);
+        fileSystem.getFile(options);
     },
     _resolveSubtitles: function (text)
     {
@@ -388,7 +388,7 @@
             scrollbar:
             {
                 line: { color: "rgba(255,255,255,0.5)", margin: Math.floor(width * 0.5), width: 1 },
-                holder: { borderRadius: 0, color: "rgba(255,255,255,0.8)", length: width * 0.5, padding: 0.1 * width },
+                holder: { color:"red", borderRadius: 0, color: "rgba(255,255,255,0.8)", length: width * 0.5, padding: 0.1 * width },
                 opacity: 0.9
             }
         };

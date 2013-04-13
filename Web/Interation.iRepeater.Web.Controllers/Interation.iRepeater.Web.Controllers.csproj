@@ -45,6 +45,7 @@
     <Compile Include="AppController.cs" />
     <Compile Include="Extensions\ProductContractExtension.cs" />
     <Compile Include="Extensions\TopicContractExtension.cs" />
+    <Compile Include="HomeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -12,8 +12,7 @@ namespace Interation.iRepeater.Repository.RepositoryImplementation
         {
             using (var db = new iRepeaterDbContext())
             {
-                return db.Topic.ToList();
-//                return db.Proc_SelectCurrentTopics().ToList();
+                return db.Proc_SelectCurrentTopics().ToList();
             }
         }
     }

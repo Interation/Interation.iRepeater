@@ -25,7 +25,7 @@ div.header div.search input.empty { color:#cccccc; }
 div.header div.search a.clear { background:url(../images/clear.png) no-repeat; background-size:contain; display:none; float:left; height:22px; width:22px; }
 div.header div.search.filled a.clear { display:block; }
 
-div.main { overflow:scroll; width:100%; }
+div.main { overflow:hidden; width:100%; }
 div.main div.banner { border-radius:6px; box-shadow:rgba(0,0,0,0.5) 1px 1px 5px; overflow:hidden; }
 div.main div.banner div.displayer { float:left; height:100%; width:75%; }
 div.main div.banner div.displayer a { display:block; height:100%; width:100%; }

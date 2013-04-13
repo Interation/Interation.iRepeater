@@ -10,14 +10,13 @@
 namespace Interation.iRepeater.Repository.Entity
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Topic
+    public partial class Proc_SelectNewestProducts_Result
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public Nullable<int> Downloads { get; set; }
         public System.DateTime CreatedDate { get; set; }
-        public string ImageUrl { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
     }
 }

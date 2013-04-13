@@ -8,7 +8,10 @@ namespace Interation.iRepeater.Service.Contract
         {
             return new TopicViewModel
             {
-
+                Id = contract.Id,
+                Name = contract.Name,
+                ImageUrl = contract.ImageUrl,
+                CreatedDate = contract.CreatedDate
             };
         }
     }

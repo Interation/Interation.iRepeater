@@ -20,6 +20,50 @@
                 return result;
             }
         },
+        formatDate: function (date, format)
+        {
+            var o =
+            {
+                "M+": date.getMonth() + 1,
+                "d+": date.getDate(),
+                "h+": date.getHours(),
+                "m+": date.getMinutes(),
+                "s+": date.getSeconds(),
+                "q+": Math.floor((date.getMonth() + 3) / 3),
+                "S": date.getMilliseconds()
+            };
+
+            if (/(y+)/.test(format))
+            {
+                format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+            }
+
+            if (/(M{3,4})/.test(format))
+            {
+                var month = date.getMonth();
+                var shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                var longMonths = ["January", "February", "March", "April", "May", "June","July","August", "September", "October", "November", "December"];
+
+                format = format.replace(RegExp.$1, RegExp.$1.length == 3 ? shortMonths[month] : longMonths[month]);
+            }
+
+            for (var k in o)
+            {
+                if (new RegExp("(" + k + ")").test(format))
+                {
+                    format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                }
+            }
+
+            return format;
+        },
+        resolveDate: function(str)
+        {
+            if (match = str.match(/Date\((\d+)\)/))
+            {
+                return new Date(parseInt(match[1]));
+            }
+        },
         formatTime: function (seconds, milli)
         {
             var date = new Date(Math.round(seconds * 1000));

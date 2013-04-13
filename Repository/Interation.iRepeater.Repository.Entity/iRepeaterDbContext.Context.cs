@@ -25,13 +25,13 @@ namespace Interation.iRepeater.Repository.Entity
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-
+            throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<Product> Product { get; set; }
         public DbSet<Topic> Topic { get; set; }
         public DbSet<TopicGroup> TopicGroup { get; set; }
         public DbSet<TopicGroupMemberMapping> TopicGroupMemberMapping { get; set; }
+        public DbSet<Product> Product { get; set; }
     
         public virtual ObjectResult<Topic> Proc_SelectCurrentTopics()
         {

@@ -14,7 +14,10 @@ namespace Interation.iRepeater.Repository.Entity
         {
             return new TopicContract
             {
-
+                Id = entity.Id,
+                Name = entity.Name,
+                ImageUrl = entity.ImageUrl,
+                CreatedDate = entity.CreatedDate
             };
         }
     }

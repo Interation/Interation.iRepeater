@@ -7,7 +7,7 @@
     },
     urls:
     {
-        api: "http://api.irepeater.org/app/v1.0"
+        api: "api/app/v1.0"
     },
     settings:
     {

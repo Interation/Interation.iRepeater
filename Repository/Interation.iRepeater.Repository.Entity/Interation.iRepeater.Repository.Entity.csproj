@@ -64,6 +64,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>iRepeaterDbContext.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Proc_SelectCurrentTopics_Result.cs">
+      <DependentUpon>iRepeaterDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Proc_SelectHottestProducts_Result.cs">
+      <DependentUpon>iRepeaterDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Proc_SelectNewestProducts_Result.cs">
+      <DependentUpon>iRepeaterDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Product.cs">
       <DependentUpon>iRepeaterDbContext.tt</DependentUpon>
     </Compile>
@@ -103,7 +112,6 @@
       <DependentUpon>iRepeaterDbContext.edmx</DependentUpon>
       <LastGenOutput>iRepeaterDbContext.cs</LastGenOutput>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

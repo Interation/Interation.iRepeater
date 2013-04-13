@@ -16,8 +16,14 @@ namespace Interation.iRepeater.Repository.Entity
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string IconUrl { get; set; }
+        public string Class { get; set; }
+        public string SubClass { get; set; }
+        public Nullable<decimal> Price { get; set; }
+        public Nullable<decimal> Star { get; set; }
         public Nullable<int> Downloads { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
+        public Nullable<int> ScrollingNumber { get; set; }
     }
 }
