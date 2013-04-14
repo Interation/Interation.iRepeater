@@ -109,6 +109,66 @@
             this.focus(function () { if ($(this).hasClass("empty")) { $(this).removeClass("empty").val(""); } });
             this.blur(function () { if ($(this).val().length == 0) { $(this).addClass("empty").val(text); } }).blur();
             return this;
+        },
+        damping: function (cssKey, options)
+        {
+            if (cssKey == undefined || options == undefined)
+            {
+                return;
+            }
+
+            var $this = $(this);
+            var t0 = Date.now();
+            var s0 = parseFloat($this.css(cssKey));
+            var range = options.range;
+            var flexible = options.flexible;
+            var factor = Math.abs(options.factor);
+            var v0 = options.v0;
+            var a = factor * (v0 == 0 ? 0 : (v0 > 0 ? -1 : 1));
+
+            if (range[0] > range[1])
+            {
+                return;
+            }
+
+            if (v0 == 0)
+            {
+                if (s0 < range[0]) { $this.css(cssKey, range[0]); }
+                else if (range[1] < s0) { $this.css(cssKey, range[1]); }
+                return;
+            }
+
+            var timer = setInterval(function ()
+            {
+                try
+                {
+                    var t = Date.now() - t0;
+                    var s1 = s0 + v0 * t + 0.5 * a * (t * t);
+                    var vt = v0 + a * t;
+
+                    $("input.keywords").val(v0.toFixed(2) + "," + a + "," + t + "," + vt.toFixed(2));
+
+                    if (vt * a > 0)
+                    {
+                        if (s1 < range[0]) { $this.css({ cssKey: range[0] }); }
+                        else if (range[1] < s1) { $this.css({ cssKey: range[1] }); }
+
+                        //$("input.keywords").val(range[0] + "," + s1 + "," + range[1]);
+                        //alert(range[0] + "," + s1 + "," + range[1]);
+
+                        clearInterval(timer);
+                        return;
+                    }
+
+                    $this.css(cssKey, s1);
+                }
+                catch (e)
+                {
+                    clearInterval(timer);
+                }
+            }, 1);
+
+            return this;
         }
     });
 })(jQuery);

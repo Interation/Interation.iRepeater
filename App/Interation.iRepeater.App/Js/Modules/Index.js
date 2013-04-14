@@ -8,9 +8,18 @@
         this._initPage(this._config);
         this._resizePage($(window).width(), $(window).height());
 
-
-
+        $("body").bind("mouseup", function (event) { _this._touchEnd(this, event); })
+                 .bind("mousemove", function (event) { _this._touchMove(this, event); })
+                 .bind("touchend", function (event) { _this._touchEnd(this, event.originalEvent.touches[0]); })
+                 .bind("touchmove", function (event) { _this._touchMove(this, event.originalEvent.touches[0]); event.preventDefault(); });
+        $("div#header input.keywords").watermark("Search")
+                                      .focus(function (event) { $(this).select(); })
+                                      .keypress(function (event) { _this._keypress(this, event); })
+                                      .bind("propertychange input", function (event) { _this._change(this, event); });
+        $("div#header div.search a.clear").click(function () { _this._clearKeywords(); });
         $("div#footer ul.menu a:first").click();
+
+        $("div.wrapper").scrollTop(100);
     },
     _search: function (keywords)
     {
@@ -18,32 +27,7 @@
     },
     _clearKeywords: function (sender, event)
     {
-        $("input[name=keywords]").val("").focus().parent().removeClass("filled");
-    },
-    _keypress: function (sender, event)
-    {
-        sender = $(sender);
-        var name = sender.attr("name");
-
-        switch (name)
-        {
-            case "keywords":
-                if (event.keyCode == 13 && !sender.hasClass("empty")) { this._search(sender.val()); }
-                break;
-        }
-    },
-    _change: function (sender, event)
-    {
-        sender = $(sender);
-        var name = sender.attr("name");
-
-        switch (name)
-        {
-            case "keywords":
-                if (sender.val().length == 0) { sender.parent(".filled").removeClass("filled"); }
-                else if (!sender.hasClass("empty")) { sender.parent().addClass("filled"); }
-                break;
-        }
+        $("input[name=keywords]").val("").parent().removeClass("filled");
     },
     _selectMenu: function (sender, name, config)
     {
@@ -73,7 +57,7 @@
         {
             url: url,
             cache: false,
-            success: function (json) { if (_this.__loadingIndex == loadingIndex) { _this._initPageblock(page, json); } },
+            success: function (json) { if (_this.__loadingIndex == loadingIndex) { _this._generateBlock(page, json); } },
             error: function (response) { alert("Cannot connect to iRepeater Store"); },
             complete: function () { loading.hide(); }
         };
@@ -106,6 +90,176 @@
 
         return config;
     },
+    _change: function (sender, event)
+    {
+        sender = $(sender);
+        var name = sender.attr("name");
+
+        switch (name)
+        {
+            case "keywords":
+                if (sender.val().length == 0) { sender.parent(".filled").removeClass("filled"); }
+                else if (!sender.hasClass("empty")) { sender.parent().addClass("filled"); }
+                break;
+        }
+    },
+    _keypress: function (sender, event)
+    {
+        sender = $(sender);
+        var name = sender.attr("name");
+
+        switch (name)
+        {
+            case "keywords":
+                if (event.keyCode == 13 && !sender.hasClass("empty")) { this._search(sender.val()); }
+                break;
+        }
+    },
+    _touchStart: function (sender, event)
+    {
+        if (this._touchInfo == undefined)
+        {
+            var touch = event;
+
+            this._touchInfo =
+            {
+                start: { pageX: touch.pageX, pageY: touch.pageY, time: Date.now() }
+            };
+        }
+
+        switch (sender.attr("for"))
+        {
+            case "showcase":
+                this._touchInfo.showcase =
+                {
+                    sender: sender,
+                    marginLeft: parseInt(sender.css("margin-left")),
+                    minMarginLeft: -100
+                };
+                break;
+            case "wrapper":
+                this._touchInfo.wrapper =
+                {
+                    sender: sender,
+                    marginTop: parseInt(sender.css("margin-top")),
+                    minMarginTop: sender.parent().height() - sender.height()
+                };
+                break;
+        }
+    },
+    _touchMove: function (sender, event)
+    {
+        if (this._touchInfo == undefined)
+        {
+            return;
+        }
+
+        var start = this._touchInfo.start;
+        var current = event;
+
+        if (this._touchInfo.vertical == undefined)
+        {
+            var xx = Math.pow(start.pageX - current.pageX, 2);
+            var yy = Math.pow(start.pageY - current.pageY, 2);
+
+            if (xx + yy > 450)
+            {
+                this._touchInfo.vertical = yy > xx;
+            }
+        }
+
+        if (this._touchInfo.showcase != undefined)
+        {
+            if (this._touchInfo.vertical === false)
+            {
+                var _info = this._touchInfo.showcase;
+                var _sender = _info.sender;
+
+                var marginLeft = _info.marginLeft + current.pageX - start.pageX;
+                if (marginLeft < _info.minMarginLeft) { marginLeft = _info.minMarginLeft; }
+                else if (marginLeft > 0) { marginLeft = 0; }
+
+                _sender.css({ marginLeft: marginLeft });
+            }
+        }
+
+        if (this._touchInfo.wrapper != undefined)
+        {
+            if (this._touchInfo.vertical === true || this._touchInfo.showcase == undefined)
+            {
+                var _info = this._touchInfo.wrapper;
+                var _sender = _info.sender;
+
+                var marginTop = _info.marginTop + current.pageY - start.pageY;
+                if (marginTop < _info.minMarginTop) { marginTop = _info.minMarginTop + (marginTop - _info.minMarginTop) * 0.5; }
+                else if (marginTop > 0) { marginTop = marginTop * 0.5; }
+
+                if (_info.footprint == undefined)
+                {
+                    _info.footprint = [{ time: start.time, value: _info.marginTop }, { time: Date.now(), value: marginTop }];
+                }
+                else
+                {
+                    _info.footprint = [_info.footprint[1], { time: Date.now(), value: marginTop }];
+                }
+
+                _sender.css({ marginTop: marginTop });
+            }
+        }
+    },
+    _touchEnd: function (sender, event)
+    {
+        if (this._touchInfo == undefined)
+        {
+            return;
+        }
+
+        if (this._touchInfo.wrapper != undefined)
+        {
+            var _info = this._touchInfo.wrapper;
+            var _sender = _info.sender;
+            var _footprint = _info.footprint;
+
+            if (_footprint != undefined)
+            {
+                var delta = _footprint[1].time - _footprint[0].time;
+                var velocity = delta == 0 ? 0 : (_footprint[1].value - _footprint[0].value) / delta;
+                _sender.damping("margin-top", { range: [_info.minMarginTop, 0], flexible: true, factor: 0.01, v0: velocity });
+            }
+        }
+
+        this._touchInfo = null;
+    },
+    _touchcancel: function (sender, event)
+    {
+        
+    },
+    _bindEvents: function (sender)
+    {
+        var _this = this;
+
+        switch (sender.attr("for"))
+        {
+            case "frame":
+                sender.children("div.wrapper").bind("touchstart", function (event)
+                {
+                    _this._touchStart($(this), event.originalEvent.touches[0]);
+                }).bind("mousedown", function (event)
+                {
+                    _this._touchStart($(this), event);
+                });
+                break;
+            case "showcase":
+                sender.children("ul.pages").bind("touchstart", function (event)
+                {
+                    _this._touchStart($(this), event.originalEvent.touches[0]);
+                }).bind("mousedown", function (event)
+                {
+                    _this._touchStart($(this), event);
+                });
+                break;
+        }
+    },
     _initPage: function (config)
     {
         var _this = this;
@@ -129,7 +283,7 @@
             }
         });
     },
-    _initPageblock: function (page, json)
+    _generateBlock: function (page, json)
     {
         var ul = $("div#main>ul.frames");
         var clone = ul.children(".template").clone().removeClass("template").appendTo(ul);
@@ -139,8 +293,8 @@
         {
             case "featured":
                 this._generateBanner(wrapper, json.Topics);
-                this._generateShowcase(wrapper, json.Hottest, 6);
                 this._generateShowcase(wrapper, json.Newest, 6);
+                this._generateShowcase(wrapper, json.Hottest, 6);
 
                 break;
         }
@@ -166,21 +320,22 @@
         var frame = function ()
         {
             li = section.children();
-            li.first().before(li.last().remove());
-            section.css({ marginTop: (3 - framesCount) * frameHeight });
             displayer.find("img").attr("src", li.last().find("img").attr("src"));
+            section.css({ marginTop: defaultMargin });
+            li.first().before(li.last().remove());
+
+            setTimeout(function ()
+            {
+                section.animate({ marginTop: animationMargin }, 1000, frame);
+            }, 3000);
         }
 
         var frameHeight = li.height();
         var framesCount = section.children().length;
+        var defaultMargin = (3 - framesCount) * frameHeight;
+        var animationMargin = (4 - framesCount) * frameHeight;
 
         frame();
-
-        var timer = setInterval(function ()
-        {
-            try { section.animate({ marginTop: (4 - framesCount) * frameHeight }, frame); }
-            catch (e) { clearInterval(timer); }
-        }, 3000);
 
         return banner.show();
     },
@@ -233,25 +388,6 @@
 
         return showcase.show();
     },
-    _bindEvents: function (sender)
-    {
-        switch (sender.attr("for"))
-        {
-            case "frame":
-                sender.bind("touchstart", function (event)
-                {
-
-                    //event.preventDefault();
-                });
-                break;
-            case "showcase":
-                sender.find("ul.pages").bind("touchstart", function (event)
-                {
-
-                });
-                break;
-        }
-    },
     _resizePage: function (width, height)
     {
         var header = $("div#header");
@@ -260,7 +396,7 @@
 
         header.css({ height: parseInt(width * 0.045) });
         footer.css({ height: parseInt(width * 0.050) });
-        main.css({ height: height - header.height() - footer.height() });
+        main.css({ height: Math.round(height - header.height() - footer.height()) });
 
         this._resizeHeader(header, header.width(), header.height());
         this._resizeMain(main, main.width(), main.height());
@@ -331,22 +467,22 @@
         var autoWidth = width - 2 * unitWidth - 6;
         var titleMargin = parseInt(showcase.parent().children("div.banner").css("margin-left"));
 
-        head.css({ height: parseInt(width * 0.033), paddingLeft: titleMargin }).css({ lineHeight: head.css("height") });
-        headName.css({ fontSize: 0.5 * head.height() });
-        headAnchor.css({ fontSize: 0.3 * head.height(), marginLeft: head.height() * 0.5 });
+        head.css({ boxShadow: this._getShadow(width * 0.002, width * 0.003, "rgba(0,0,0,0.5)"), height: parseInt(width * 0.033), paddingLeft: titleMargin }).css({ lineHeight: head.css("height") });
+        headName.css({ fontSize: parseInt(0.015 * width) });
+        headAnchor.css({ fontSize: 0.35 * head.height(), marginLeft: head.height() * 0.5 });
         navs.css({ height: parseInt(width * 0.02) }).css({ marginBottom: parseInt(0.5 * navs.height()), marginTop: parseInt(0.5 * navs.height()), width: navList.length * navs.height() });
         navList.css({ height: parseInt(navs.height() * 0.3) }).css({ borderRadius: navList.height(), margin: parseInt(0.5 * (navs.height() - navList.height())), width: navList.height() });
         pageList.css({ width: width });
         product.css({ height: parseInt(width * 0.1), width: unitWidth });
-        icon.css({ height: product.height() - 2 * titleMargin, margin: titleMargin }).css({ width: icon.height() });
+        icon.css({ borderRadius: parseInt(width * 0.008), height: product.height() - 2 * titleMargin, margin: titleMargin }).css({ width: icon.height() });
         info.css({ height: icon.height(), margin: parseInt(icon.css("margin-left")), marginLeft: 0, width: unitWidth - icon.width() - 3 * parseInt(icon.css("margin-left")) });
-        title.css({ height: parseInt(info.height() * 0.18) }).css({ fontSize: title.height(), lineHeight: title.css("height") });
-        text.css({ height: parseInt(info.height() * 0.14) }).css({ fontSize: text.height(), lineHeight: text.css("height") });
+        title.css({ height: parseInt(0.015 * width) }).css({ fontSize: title.height(), lineHeight: title.css("height") });
+        text.css({ height: parseInt(0.012 * width) }).css({ fontSize: text.height(), lineHeight: text.css("height") });
         text.css({ marginBottom: parseInt((info.height() - title.height() - 3 * text.height()) / 4) });
         title.css({ marginBottom: parseInt(info.height() - 3 * (text.height() + parseInt(text.css("margin-bottom"))) - title.height()) });
         star.css({ paddingLeft: text.height() * 6 });
-        action.css({ height: parseInt(product.height() * 0.2), marginRight: titleMargin }).css({ fontSize: text.css("font-size") }).css({ marginTop: -parseInt(0.5 * (product.height() + action.height())) });
-        actionAnchor.css({ lineHeight: action.css("height"), padding: "0px " + parseInt(action.height() * 0.5) + "px" });
+        action.css({ height: parseInt(product.height() * 0.25), marginRight: titleMargin }).css({ fontSize: text.css("font-size") }).css({ marginTop: -parseInt(0.5 * (product.height() + action.height())) });
+        actionAnchor.css({ lineHeight: action.css("height"), padding: "0px " + parseInt(action.height() * 0.6) + "px" });
     },
     _resizeFooter: function (footer, width, height)
     {
@@ -359,7 +495,7 @@
 
         menu.css({ height: height, width: menuItems.length * (unitWidth + 2 * margin.h) });
         menuItems.css({ height: height - 2 * margin.v, margin: margin.v + "px " + margin.h + "px", width: unitWidth });
-        anchors.css({ height: parseInt(menuItems.height() * 0.45) }).css({ lineHeight: anchors.css("height"), paddingTop: menuItems.height() - anchors.height() });
-        anchors.css({ borderRadius: height * 0.08, fontSize: parseInt(anchors.height() * 0.65) });
+        anchors.css({ height: parseInt(menuItems.height() * 0.35) }).css({ lineHeight: anchors.css("height"), paddingTop: menuItems.height() - anchors.height() });
+        anchors.css({ borderRadius: height * 0.08, fontSize: parseInt(anchors.height() * 0.75) });
     }
 };

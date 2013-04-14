@@ -1,6 +1,6 @@
 ﻿::-ms-clear { display: none; }
 
-body { background:#cbcbcb; font-family:Arial,Helvetica,'Helvetica Neue'; font-size:12px; height:100%; margin:0px; overflow:hidden; }
+body { background:#cbcbcb; font-family:'Helvetica Neue'; font-size:12px; height:100%; margin:0px; overflow:hidden; }
 body a { color:#000000; text-decoration:none; }
 body h1 { margin:0px; padding:0px; }
 body h2 { margin:0px; padding:0px; }
@@ -22,11 +22,11 @@ div#header div.search input.empty { color:#cccccc; text-transform:capitalize; }
 div#header div.search a.clear { background:url(../images/clear.png) no-repeat; background-size:100% 100%; display:none; float:left; }
 div#header div.search.filled a.clear { display:block; }
 
-div#main { overflow:hidden; width:100%; }
+div#main { -webkit-animation:transformZ(0px); overflow:hidden; width:100%; }
 div#main div.loading { background:url(../images/loading1.gif) no-repeat left; background-size:auto 100%; color:#333333; margin:0px auto; position:absolute; text-align:right; text-shadow:1px 1px 0px rgba(255,255,255,0.5); text-transform:capitalize; }
-div#main div.wrapper { float:left; overflow:hidden; width:100%; zoom:1; }
+div#main div.wrapper { background:#cbcbcb; float:left; overflow:hidden; width:100%; zoom:1; }
 div#main ul.frames { height:100%; width:100000px;}
-div#main ul.frames>li { float:left; overflow:auto; height:100%; }
+div#main ul.frames>li { background:#666666; float:left; overflow:hidden; height:100%; }
 div#main ul.frames>li.template { display:none; }
 div#main div.banner { border-radius:6px; box-shadow:rgba(0,0,0,0.5) 1px 1px 5px; overflow:hidden; }
 div#main div.banner div.displayer { float:left; height:100%; width:75%; }
@@ -38,9 +38,9 @@ div#main div.banner ul.section>li a { display:block; height:100%; width:100%; }
 div#main div.banner ul.section>li a img { border:0px; height:100%; width:100%; }
 
 div.showcase { overflow:hidden; width:100%; zoom:1; }
-div.showcase p.head { box-shadow:rgba(0,0,0,0.3) 0px 5px 5px; position:relative; text-shadow:1px 1px #eeeeee; }
+div.showcase p.head { position:relative; text-shadow:1px 1px #eeeeee; }
 div.showcase p.head span.name { font-weight:bold; }
-div.showcase ul.pages { box-shadow:rgba(0,0,0,0.8) 0px 1px 2px; overflow:hidden; z-index:0; zoom:1; }
+div.showcase ul.pages { overflow:hidden; z-index:0; zoom:1; }
 div.showcase ul.pages>li { float:left; overflow:hidden; zoom:1; }
 div.showcase ul.navs { margin:15px auto; overflow:hidden; zoom:1; }
 div.showcase ul.navs>li { background:#999999; border-radius:3px; box-shadow:rgba(0,0,0,0.5) 2px 2px 2px inset; display:block; float:left; height:6px; margin:5px; width:6px; }
@@ -51,7 +51,7 @@ div.showcase div.product div.info { float:left; text-shadow:1px 1px #dddddd; }
 div.showcase div.product p.title { font-size:16px; font-weight:bold; }
 div.showcase div.product p.star { background:url(../images/stars.png) no-repeat; background-size:auto 600%; }
 div.showcase div.product div.action { float:right; height:22px; line-height:22px; margin:-50px 50px 0px 0px; text-align:center; }
-div.showcase div.product div.action a { background:#999999; border-radius:3px; box-shadow:rgba(0,0,0,0.5) 0px 1px 2px inset; color:#f0f0f0; display:block; float:left; height:100%; }
+div.showcase div.product div.action a { background:#999999; border-radius:3px; box-shadow:rgba(0,0,0,0.5) 0px 1px 2px inset; color:rgba(255,255,255,0.8); display:block; font-weight:bold; float:left; height:100%; text-transform:uppercase; }
 div.showcase div.product.alter { background:#bbbbbb; }
 
 div#footer { background:url(../images/footerbackground.jpg) repeat-x; background-size:auto 100%; width:100%; }

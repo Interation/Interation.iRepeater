@@ -51,8 +51,8 @@ namespace Interation.iRepeater.Web.Controllers
             var viewModel = new FeaturedViewModel
             {
                 Topics = topicContracts == null ? null : topicContracts.ConvertAll(refer => refer.ToViewModel()),
-                Newest = new ProductGroupViewModel { Title = "Newest", Products = newestProducts == null ? null : newestProducts.ConvertAll(refer => refer.ToViewModel()) },
-                Hottest = new ProductGroupViewModel { Title = "Hottest", Products = hottestProducts == null ? null : hottestProducts.ConvertAll(refer => refer.ToViewModel()) }
+                Newest = new ProductGroupViewModel { Title = "New & Noteworthy", Products = newestProducts == null ? null : newestProducts.ConvertAll(refer => refer.ToViewModel()) },
+                Hottest = new ProductGroupViewModel { Title = "What's Hot", Products = hottestProducts == null ? null : hottestProducts.ConvertAll(refer => refer.ToViewModel()) }
             };
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
